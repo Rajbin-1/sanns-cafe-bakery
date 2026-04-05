@@ -365,6 +365,10 @@ export default function MenuPage() {
 
             {sectionIndex === 1 && (
               <div>
+                {(() => {
+                  itemIndex++; // Increment for food menu photos section
+                  return null;
+                })()} 
                 <div
                   className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16"
                   ref={(el) => {
