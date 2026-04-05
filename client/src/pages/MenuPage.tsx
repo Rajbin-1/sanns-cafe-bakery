@@ -327,13 +327,14 @@ export default function MenuPage() {
                   </div>
                 </div>
 
-                {/* Drinks Items - Flashcards with staggered animation */}
+                {/* Drinks Items - Flashcards with individual animations */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                   {section.items.map((item, index) => {
                     const currentIndex = itemIndex;
                     itemIndex++;
                     const fromLeft = index % 2 === 0;
-                    const staggerDelay = index * 150; // Each item has 150ms more delay
+                    // Stagger: first column items (0,2) appear, then second column items (1,3)
+                    const staggerDelay = fromLeft ? index * 150 : (index - 1) * 150 + 150;
                     return (
                       <div
                         key={item.name}
@@ -418,13 +419,14 @@ export default function MenuPage() {
                   </div>
                 </div>
 
-                {/* Food Items - Flashcards with staggered animation */}
+                {/* Food Items - Flashcards with individual animations */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                   {section.items.map((item, index) => {
                     const currentIndex = itemIndex;
                     itemIndex++;
                     const fromLeft = index % 2 === 0;
-                    const staggerDelay = index * 150; // Each item has 150ms more delay
+                    // Stagger: first column items (0,2) appear, then second column items (1,3)
+                    const staggerDelay = fromLeft ? index * 150 : (index - 1) * 150 + 150;
                     return (
                       <div
                         key={item.name}
