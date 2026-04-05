@@ -52,7 +52,7 @@ const foodMenu: MenuItem[] = [
     name: 'Chocolate Brownie',
     price: 'Rs 200-300',
     description: 'Decadent chocolate brownie, fudgy and rich, made with premium dark chocolate.',
-    image: '/assets/images/food/chowmein.png',
+    image: '/assets/images/food/coffee-cake.png',
   },
   {
     name: 'Jhol Momo',
@@ -271,7 +271,8 @@ export default function MenuPage() {
                 <div
                   className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16"
                   ref={(el) => {
-                    itemRefs.current[currentIndex] = el;
+                    const snapIndex = currentIndex;
+                    if (el) itemRefs.current[snapIndex] = el;
                   }}
                   style={{
                     transition: 'all 700ms cubic-bezier(0.34, 1.56, 0.64, 1)',
@@ -375,8 +376,8 @@ export default function MenuPage() {
                 <div
                   className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16"
                   ref={(el) => {
-                    currentIndex++; // Increment for food photos
-                    itemRefs.current[currentIndex] = el;
+                    const snapIndex = currentIndex + 1;
+                    if (el) itemRefs.current[snapIndex] = el;
                   }}
                   style={{
                     transition: 'all 700ms cubic-bezier(0.34, 1.56, 0.64, 1)',
@@ -450,7 +451,8 @@ export default function MenuPage() {
                 {/* Food Items - Flashcards with individual animations */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                   {section.items.map((item, index) => {
-                    currentIndex++; // Increment for each food item
+                    const foodPhotoIndex = currentIndex + 1;
+                    currentIndex = foodPhotoIndex + index; // Set current to food item indices
                     const itemCurrentIndex = currentIndex;
                     const fromLeft = index % 2 === 0;
                     // Stagger: first column items (0,2) appear, then second column items (1,3)
@@ -459,26 +461,14 @@ export default function MenuPage() {
                       <div
                         key={item.name}
                         ref={(el) => {
-                          itemRefs.current[itemCurrentIndex] = el;
+                          const snapIndex = itemCurrentIndex;
+                          if (el) itemRefs.current[snapIndex] = el;
                         }}
                       >
                         <MenuItemCard
                           item={item}
                           index={staggerDelay}
                           isVisible={visibleItems[itemCurrentIndex]}
-                          fromLeft={fromLeft}
-                        />
-                    return (
-                      <div
-                        key={item.name}
-                        ref={(el) => {
-                          itemRefs.current[currentIndex] = el;
-                        }}
-                      >
-                        <MenuItemCard
-                          item={item}
-                          index={staggerDelay}
-                          isVisible={visibleItems[currentIndex]}
                           fromLeft={fromLeft}
                         />
                       </div>
