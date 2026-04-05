@@ -293,7 +293,7 @@ export default function MenuPage() {
                       className="w-full h-auto object-contain transition-transform duration-500"
                       width={400}
                       height={600}
-                      loading="lazy"
+                      loading="eager"
                       decoding="async"
                     />
                     <div
@@ -325,7 +325,7 @@ export default function MenuPage() {
                       className="w-full h-auto object-contain transition-transform duration-500"
                       width={400}
                       height={600}
-                      loading="lazy"
+                      loading="eager"
                       decoding="async"
                     />
                     <div
@@ -398,7 +398,7 @@ export default function MenuPage() {
                       className="w-full h-auto object-contain transition-transform duration-500"
                       width={400}
                       height={600}
-                      loading="lazy"
+                      loading="eager"
                       decoding="async"
                     />
                     <div
@@ -430,7 +430,7 @@ export default function MenuPage() {
                       className="w-full h-auto object-contain transition-transform duration-500"
                       width={400}
                       height={600}
-                      loading="lazy"
+                      loading="eager"
                       decoding="async"
                     />
                     <div

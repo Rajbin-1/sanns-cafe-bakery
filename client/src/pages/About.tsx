@@ -61,7 +61,7 @@ export default function About() {
           >
             About Us
           </h2>
-          <p style={{ color: '#8B7355', fontSize: '1.1rem' }}>
+          <p style={{ color: '#5D4E42', fontSize: '1.1rem' }}>
             More than a café—it's a feeling, a community, a moment of joy
           </p>
         </div>
