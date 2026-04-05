@@ -35,8 +35,9 @@ export default function Navigation({ onNavigate }: NavigationProps) {
     <nav
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
       style={{
-        backgroundColor: '#3E2723',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+        backgroundColor: isScrolled ? 'rgba(62, 39, 35, 0.85)' : '#8B7355',
+        boxShadow: isScrolled ? '0 2px 8px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.2)',
+        backdropFilter: isScrolled ? 'blur(8px)' : 'none',
       }}
     >
       <div className="container flex items-center justify-between py-4">

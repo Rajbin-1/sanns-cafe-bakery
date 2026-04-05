@@ -17,7 +17,7 @@ export default function Footer({ onNavigate }: FooterProps) {
         background: 'linear-gradient(135deg, #3E2723 0%, #2C1810 50%, #3E2723 100%)',
         color: '#FBF8F3',
       }}
-      className="py-16 relative overflow-hidden"
+      className="py-8 relative overflow-hidden"
     >
       {/* Decorative elements */}
       <div
@@ -38,38 +38,38 @@ export default function Footer({ onNavigate }: FooterProps) {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           {/* Brand */}
           <div className="animate-fade-in-up">
-            <div className="flex items-center gap-2 mb-4">
-              <Coffee size={24} style={{ color: '#D4A574' }} className="animate-cup-rotate" />
+            <div className="flex items-center gap-2 mb-3">
+              <Coffee size={20} style={{ color: '#D4A574' }} className="animate-cup-rotate" />
               <h3
-                className="text-2xl font-bold"
+                className="text-lg font-bold"
                 style={{ fontFamily: "'Playfair Display', serif", color: '#D4A574' }}
               >
                 Sann's Café
               </h3>
             </div>
-            <p className="text-sm" style={{ color: 'rgba(251, 248, 243, 0.85)' }}>
+            <p className="text-xs" style={{ color: 'rgba(251, 248, 243, 0.85)' }}>
               Where artisanal craft meets gallery ambiance. Crafted with passion, served with love.
             </p>
           </div>
 
           {/* Quick Links */}
           <div className="animate-fade-in-up delay-100">
-            <h4 className="font-semibold mb-4" style={{ color: '#D4A574', fontSize: '1.1rem' }}>
+            <h4 className="font-semibold mb-3" style={{ color: '#D4A574', fontSize: '0.95rem' }}>
               Quick Links
             </h4>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-1 text-xs">
               {[
-                { label: 'Home', href: '#home' },
-                { label: 'Menu', href: '#menu' },
-                { label: 'Find Us', href: '#find-us' },
-                { label: 'Reviews', href: '#reviews' },
+                { label: 'Home', href: 'home' },
+                { label: 'Menu', href: 'menu' },
+                { label: 'About Us', href: 'about' },
+                { label: 'Gallery', href: 'gallery' },
               ].map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
                     onClick={(e) => {
                       e.preventDefault();
-                      handleNavClick(link.href.replace('#', ''));
+                      handleNavClick(link.href);
                     }}
                     className="transition-all duration-300 hover:text-yellow-100 hover:translate-x-1 inline-block"
                     style={{ color: 'rgba(251, 248, 243, 0.9)' }}
@@ -83,10 +83,10 @@ export default function Footer({ onNavigate }: FooterProps) {
 
           {/* Contact Info */}
           <div className="animate-fade-in-up delay-200">
-            <h4 className="font-semibold mb-4" style={{ color: '#D4A574', fontSize: '1.1rem' }}>
+            <h4 className="font-semibold mb-3" style={{ color: '#D4A574', fontSize: '0.95rem' }}>
               Contact
             </h4>
-            <div className="space-y-3 text-sm">
+            <div className="space-y-2 text-xs">
               <div className="flex items-start gap-2 group cursor-pointer">
                 <MapPin size={16} className="mt-1 flex-shrink-0" style={{ color: '#D4A574' }} />
                 <span style={{ color: 'rgba(251, 248, 243, 0.9)' }}>
@@ -108,50 +108,20 @@ export default function Footer({ onNavigate }: FooterProps) {
 
           {/* Social Links */}
           <div className="animate-fade-in-up delay-300">
-            <h4 className="font-semibold mb-4" style={{ color: '#D4A574', fontSize: '1.1rem' }}>
+            <h4 className="font-semibold mb-3" style={{ color: '#D4A574', fontSize: '0.95rem' }}>
               Follow Us
             </h4>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2">
               <a
-                href="https://www.instagram.com/sannscafe25"
+                href="https://www.instagram.com/sannscafe25?igsh=Y3NlNmM2am1ranEw"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 transition-all duration-300 hover:scale-110 group"
+                className="inline-flex items-center gap-1 transition-all duration-300 hover:scale-110 group text-xs"
                 style={{ color: 'rgba(251, 248, 243, 0.9)' }}
                 title="Follow us on Instagram"
               >
-                <Instagram size={20} className="group-hover:animate-subtle-glow" />
-                <span className="text-sm">Instagram</span>
-              </a>
-              <a
-                href="https://www.facebook.com/sannscafe"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 transition-all duration-300 hover:scale-110 group"
-                style={{ color: 'rgba(251, 248, 243, 0.9)' }}
-                title="Follow us on Facebook"
-              >
-                <span className="text-sm">👍 Facebook</span>
-              </a>
-              <a
-                href="https://twitter.com/sannscafe25"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 transition-all duration-300 hover:scale-110 group"
-                style={{ color: 'rgba(251, 248, 243, 0.9)' }}
-                title="Follow us on Twitter/X"
-              >
-                <span className="text-sm">𝕏 Twitter</span>
-              </a>
-              <a
-                href="https://www.youtube.com/@sannscafe"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 transition-all duration-300 hover:scale-110 group"
-                style={{ color: 'rgba(251, 248, 243, 0.9)' }}
-                title="Subscribe to our YouTube channel"
-              >
-                <span className="text-sm">▶️ YouTube</span>
+                <Instagram size={16} className="group-hover:animate-subtle-glow" />
+                <span>Instagram</span>
               </a>
             </div>
           </div>
@@ -203,15 +173,12 @@ export default function Footer({ onNavigate }: FooterProps) {
           </div>
 
           {/* Copyright */}
-          <div className="text-center text-sm animate-fade-in-up delay-100">
+          <div className="text-center text-xs animate-fade-in-up delay-100">
             <p style={{ color: 'rgba(251, 248, 243, 0.7)' }}>
               &copy; 2026 Sann's Café & Bakery. All rights reserved.
             </p>
-            <p className="mt-2" style={{ color: 'rgba(251, 248, 243, 0.6)' }}>
-              Crafted with care in Tokha, Kathmandu
-            </p>
-            <p className="mt-3 text-xs" style={{ color: 'rgba(212, 165, 116, 0.8)' }}>
-              Built with passion for coffee lovers everywhere
+            <p className="mt-1" style={{ color: 'rgba(212, 165, 116, 0.8)' }}>
+              Powered By <strong>Antarabarta</strong>
             </p>
           </div>
         </div>

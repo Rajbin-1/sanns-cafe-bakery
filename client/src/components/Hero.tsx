@@ -54,12 +54,12 @@ export default function Hero({ onExplore }: HeroProps) {
 
   return (
     <section id="home" className="relative w-full h-screen overflow-hidden flex items-center justify-center">
-      {/* Background - Desktop: Video, Mobile: Poster */}
+      {/* Background - Video for both desktop and mobile */}
       <div className="absolute inset-0 w-full h-full">
-        {/* Desktop Video */}
+        {/* Video */}
         <video
           ref={videoRef}
-          className="hidden md:block absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover"
           muted
           playsInline
           autoPlay
@@ -73,51 +73,22 @@ export default function Hero({ onExplore }: HeroProps) {
           <source src={HERO_VIDEO_URL} type="video/mp4" />
         </video>
 
-        {/* Mobile: Poster Image */}
+        {/* Fallback Poster if video fails */}
         <img
           src={HERO_POSTER_URL}
           alt="Sann's Café & Bakery Gallery Interior - Premium Coffee Shop Atmosphere in Kathmandu"
-          className="md:hidden absolute inset-0 w-full h-full object-cover"
-          loading="eager"
-          width={1080}
-          height={1920}
-          fetchPriority="high"
+          className="absolute inset-0 w-full h-full object-cover hidden"
+          style={{ display: videoLoaded ? 'none' : 'block' }}
         />
 
-        {/* Mobile Video Overlay (subtle) */}
-        <video
-          className="md:hidden absolute inset-0 w-full h-full object-cover opacity-40"
-          autoPlay
-          muted
-          playsInline
-          loop={true}
-          preload="auto"
-          width={1080}
-          height={1920}
-        >
-          <source src={HERO_VIDEO_URL} type="video/mp4" />
-        </video>
+        {/* Subtle White Overlay */}
+        <div
+          className="absolute inset-0 w-full h-full"
+          style={{
+            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.08) 100%)',
+          }}
+        />
       </div>
-
-      {/* Enhanced Overlay */}
-      <div
-        className={`absolute inset-0 transition-opacity duration-1000 ${
-          showOverlay ? 'opacity-100' : 'opacity-0'
-        }`}
-        style={{
-          background: 'linear-gradient(135deg, rgba(44, 24, 16, 0.65) 0%, rgba(26, 15, 10, 0.55) 50%, rgba(44, 24, 16, 0.65) 100%)',
-        }}
-      />
-
-      {/* Mobile overlay (stronger) */}
-      <div className="md:hidden absolute inset-0" style={{
-        background: 'linear-gradient(135deg, rgba(44, 24, 16, 0.75) 0%, rgba(26, 15, 10, 0.70) 50%, rgba(44, 24, 16, 0.75) 100%)',
-      }} />
-
-      {/* Decorative gradient overlay */}
-      <div className="absolute inset-0 opacity-15" style={{
-        background: 'radial-gradient(circle at top right, rgba(212, 165, 116, 0.2), transparent 50%)',
-      }} />
 
       {/* Content Overlay */}
       <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4 py-20">
@@ -171,42 +142,54 @@ export default function Hero({ onExplore }: HeroProps) {
             Premium coffee, artisanal sourdough, and signature desserts in a curated art gallery atmosphere
           </p>
 
-          {/* CTA Buttons - Enhanced Visibility */}
+          {/* CTA Buttons - Professional Glowing Hover */}
           <div
             className={`flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center transition-all duration-1000 delay-400 opacity-100 translate-y-0`}
           >
+            {/* Button 1 - Explore Menu */}
             <button
               onClick={onExplore}
-              className="px-8 sm:px-10 py-3 sm:py-4 font-bold rounded-lg transition-all duration-300 hover:shadow-2xl hover:scale-110 active:scale-95 text-sm sm:text-base"
+              className="px-8 sm:px-10 py-3 sm:py-4 font-bold rounded-lg transition-all duration-300 active:scale-95 text-sm sm:text-base relative overflow-hidden"
               style={{
                 backgroundColor: '#D4A574',
                 boxShadow: '0 6px 20px rgba(212, 165, 116, 0.4)',
                 fontFamily: "'Montserrat', sans-serif",
-                color: '#FBF8F3',
+                color: '#3E2723',
+                fontWeight: '700',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 30px rgba(212, 165, 116, 0.8), 0 0 60px rgba(160, 130, 109, 0.6), inset 0 0 20px rgba(255,255,255,0.2)';
+                e.currentTarget.style.transform = 'scale(1.08)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 6px 20px rgba(212, 165, 116, 0.4)';
+                e.currentTarget.style.transform = 'scale(1)';
               }}
             >
               Explore Menu
             </button>
+
+            {/* Button 2 - Find Us */}
             <button
               onClick={() => {
-                const findUsSection = document.getElementById('find-us');
+                const findUsSection = document.getElementById('contacts');
                 findUsSection?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="px-8 sm:px-10 py-3 sm:py-4 border-2 font-bold rounded-lg transition-all duration-300 hover:shadow-2xl hover:scale-110 text-sm sm:text-base"
+              className="px-8 sm:px-10 py-3 sm:py-4 font-bold rounded-lg transition-all duration-300 active:scale-95 text-sm sm:text-base relative overflow-hidden"
               style={{
-                borderColor: '#D4A574',
-                color: '#FBF8F3',
+                backgroundColor: '#D4A574',
+                boxShadow: '0 6px 20px rgba(212, 165, 116, 0.4)',
                 fontFamily: "'Montserrat', sans-serif",
-                backgroundColor: 'rgba(212, 165, 116, 0.2)',
-                backdropFilter: 'blur(4px)',
+                color: '#3E2723',
+                fontWeight: '700',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#D4A574';
-                e.currentTarget.style.color = '#FBF8F3';
+                e.currentTarget.style.boxShadow = '0 0 30px rgba(212, 165, 116, 0.8), 0 0 60px rgba(160, 130, 109, 0.6), inset 0 0 20px rgba(255,255,255,0.2)';
+                e.currentTarget.style.transform = 'scale(1.08)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(212, 165, 116, 0.2)';
-                e.currentTarget.style.color = '#FBF8F3';
+                e.currentTarget.style.boxShadow = '0 6px 20px rgba(212, 165, 116, 0.4)';
+                e.currentTarget.style.transform = 'scale(1)';
               }}
             >
               Find Us

@@ -3,6 +3,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
+import Menu from "@/pages/Menu";
 import MenuPage from "@/pages/MenuPage";
 import Gallery from "@/pages/Gallery";
 import Contacts from "@/pages/Contacts";
@@ -53,8 +54,16 @@ function App() {
             <main>
               {currentPage === 'home' ? (
                 <>
-                  {/* Hero Section Only */}
+                  {/* Hero Section */}
                   <Hero onExplore={() => handleNavigation("menu")} />
+
+                  {/* Menu Preview Section */}
+                  <Menu />
+
+                  {/* Reviews Section */}
+                  <div style={{ paddingTop: '20px' }}>
+                    <About />
+                  </div>
                 </>
               ) : currentPage === 'menu' ? (
                 <>
