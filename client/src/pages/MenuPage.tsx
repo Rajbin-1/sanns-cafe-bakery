@@ -93,7 +93,7 @@ function MenuItemCard({ item, index, isVisible, fromLeft }: MenuItemProps) {
     <div className="mb-12">
       {/* Flashcard with rotation angle */}
       <div
-        className={`relative overflow-hidden rounded-xl shadow-2xl transition-all duration-700 cursor-pointer group h-80 max-w-sm mx-auto md:mx-0 ${
+        className={`relative overflow-hidden rounded-xl shadow-2xl transition-all cursor-pointer group h-80 max-w-sm mx-auto md:mx-0 ${
           isVisible
             ? 'opacity-100 scale-100'
             : 'opacity-0 scale-75'
@@ -104,14 +104,15 @@ function MenuItemCard({ item, index, isVisible, fromLeft }: MenuItemProps) {
             : fromLeft
               ? `translateX(-120px) rotate(-8deg) perspective(1000px)`
               : `translateX(120px) rotate(8deg) perspective(1000px)`,
-          transitionDelay: isVisible ? '200ms' : '0ms',
+          transitionDelay: isVisible ? `${index}ms` : '0ms',
+          transitionDuration: '700ms',
           transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
         }}
       >
         <img
           src={item.image}
           alt={item.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-cover transition-transform duration-500"
           loading={index > 2 ? 'lazy' : 'eager'}
           width={400}
           height={320}
@@ -136,7 +137,7 @@ function MenuItemCard({ item, index, isVisible, fromLeft }: MenuItemProps) {
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
         }`}
         style={{
-          transitionDelay: isVisible ? '400ms' : '0ms',
+          transitionDelay: isVisible ? `${index + 200}ms` : '0ms',
         }}
       >
         <h3
@@ -264,72 +265,75 @@ export default function MenuPage() {
             {/* Menu Photos using menu-*.png images */}
             {sectionIndex === 0 && (
               <div className="mb-16">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
                   {/* Menu 1 - Drinks */}
                   <div
-                    className="relative overflow-hidden rounded-2xl shadow-2xl group cursor-pointer transition-all duration-500 h-80"
+                    className="relative overflow-hidden rounded-xl shadow-xl group cursor-pointer transition-all duration-700"
                     style={{
-                      transform: visibleItems[itemIndex] ? 'translateX(0) rotate(0deg)' : 'translateX(-100px) rotate(-12deg)',
+                      transform: visibleItems[itemIndex] ? 'translateX(0) rotate(0deg) scale(1)' : 'translateX(-80px) rotate(-10deg) scale(0.85)',
                       opacity: visibleItems[itemIndex] ? 1 : 0,
-                      transitionDelay: visibleItems[itemIndex] ? '0ms' : '0ms',
+                      transitionDelay: visibleItems[itemIndex] ? '100ms' : '0ms',
+                      transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
                     }}
                   >
                     <img
                       src="/assets/images/menu/menu-1.png"
                       alt="Sann's Café Drinks Menu"
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="w-full h-auto object-contain transition-transform duration-500"
                       width={400}
-                      height={320}
+                      height={600}
                     />
                     <div
                       className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
                       style={{
-                        background: 'linear-gradient(135deg, rgba(212, 165, 116, 0.5), rgba(62, 39, 35, 0.7))',
-                        backdropFilter: 'blur(4px)',
+                        background: 'linear-gradient(135deg, rgba(212, 165, 116, 0.4), rgba(62, 39, 35, 0.5))',
+                        backdropFilter: 'blur(3px)',
                       }}
                     >
-                      <span style={{ color: '#FBF8F3', fontWeight: 'bold', fontSize: '1.3rem' }}>
-                        Menu Showcase
+                      <span style={{ color: '#FBF8F3', fontWeight: 'bold', fontSize: '1.2rem' }}>
+                        Menu
                       </span>
                     </div>
                   </div>
 
                   {/* Menu 2 - Drinks */}
                   <div
-                    className="relative overflow-hidden rounded-2xl shadow-2xl group cursor-pointer transition-all duration-500 h-80"
+                    className="relative overflow-hidden rounded-xl shadow-xl group cursor-pointer transition-all duration-700"
                     style={{
-                      transform: visibleItems[itemIndex] ? 'translateX(0) rotate(0deg)' : 'translateX(100px) rotate(12deg)',
+                      transform: visibleItems[itemIndex] ? 'translateX(0) rotate(0deg) scale(1)' : 'translateX(80px) rotate(10deg) scale(0.85)',
                       opacity: visibleItems[itemIndex] ? 1 : 0,
-                      transitionDelay: visibleItems[itemIndex] ? '100ms' : '0ms',
+                      transitionDelay: visibleItems[itemIndex] ? '200ms' : '0ms',
+                      transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
                     }}
                   >
                     <img
                       src="/assets/images/menu/menu-2.png"
                       alt="Sann's Café Drinks Menu"
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="w-full h-auto object-contain transition-transform duration-500"
                       width={400}
-                      height={320}
+                      height={600}
                     />
                     <div
                       className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
                       style={{
-                        background: 'linear-gradient(135deg, rgba(212, 165, 116, 0.5), rgba(62, 39, 35, 0.7))',
-                        backdropFilter: 'blur(4px)',
+                        background: 'linear-gradient(135deg, rgba(212, 165, 116, 0.4), rgba(62, 39, 35, 0.5))',
+                        backdropFilter: 'blur(3px)',
                       }}
                     >
-                      <span style={{ color: '#FBF8F3', fontWeight: 'bold', fontSize: '1.3rem' }}>
-                        Menu Showcase
+                      <span style={{ color: '#FBF8F3', fontWeight: 'bold', fontSize: '1.2rem' }}>
+                        Menu
                       </span>
                     </div>
                   </div>
                 </div>
 
-                {/* Drinks Items - Flashcards */}
+                {/* Drinks Items - Flashcards with staggered animation */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                   {section.items.map((item, index) => {
                     const currentIndex = itemIndex;
                     itemIndex++;
                     const fromLeft = index % 2 === 0;
+                    const staggerDelay = index * 150; // Each item has 150ms more delay
                     return (
                       <div
                         key={item.name}
@@ -339,7 +343,7 @@ export default function MenuPage() {
                       >
                         <MenuItemCard
                           item={item}
-                          index={index}
+                          index={staggerDelay}
                           isVisible={visibleItems[currentIndex]}
                           fromLeft={fromLeft}
                         />
@@ -352,72 +356,75 @@ export default function MenuPage() {
 
             {sectionIndex === 1 && (
               <div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
                   {/* Menu 3 - Food */}
                   <div
-                    className="relative overflow-hidden rounded-2xl shadow-2xl group cursor-pointer transition-all duration-500 h-80"
+                    className="relative overflow-hidden rounded-xl shadow-xl group cursor-pointer transition-all duration-700"
                     style={{
-                      transform: visibleItems[itemIndex] ? 'translateX(0) rotate(0deg)' : 'translateX(-100px) rotate(-12deg)',
+                      transform: visibleItems[itemIndex] ? 'translateX(0) rotate(0deg) scale(1)' : 'translateX(-80px) rotate(-10deg) scale(0.85)',
                       opacity: visibleItems[itemIndex] ? 1 : 0,
-                      transitionDelay: visibleItems[itemIndex] ? '0ms' : '0ms',
+                      transitionDelay: visibleItems[itemIndex] ? '100ms' : '0ms',
+                      transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
                     }}
                   >
                     <img
                       src="/assets/images/menu/menu-3.png"
                       alt="Sann's Café Food Menu"
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="w-full h-auto object-contain transition-transform duration-500"
                       width={400}
-                      height={320}
+                      height={600}
                     />
                     <div
                       className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
                       style={{
-                        background: 'linear-gradient(135deg, rgba(212, 165, 116, 0.5), rgba(62, 39, 35, 0.7))',
-                        backdropFilter: 'blur(4px)',
+                        background: 'linear-gradient(135deg, rgba(212, 165, 116, 0.4), rgba(62, 39, 35, 0.5))',
+                        backdropFilter: 'blur(3px)',
                       }}
                     >
-                      <span style={{ color: '#FBF8F3', fontWeight: 'bold', fontSize: '1.3rem' }}>
-                        Menu Showcase
+                      <span style={{ color: '#FBF8F3', fontWeight: 'bold', fontSize: '1.2rem' }}>
+                        Menu
                       </span>
                     </div>
                   </div>
 
                   {/* Menu 4 - Food */}
                   <div
-                    className="relative overflow-hidden rounded-2xl shadow-2xl group cursor-pointer transition-all duration-500 h-80"
+                    className="relative overflow-hidden rounded-xl shadow-xl group cursor-pointer transition-all duration-700"
                     style={{
-                      transform: visibleItems[itemIndex] ? 'translateX(0) rotate(0deg)' : 'translateX(100px) rotate(12deg)',
+                      transform: visibleItems[itemIndex] ? 'translateX(0) rotate(0deg) scale(1)' : 'translateX(80px) rotate(10deg) scale(0.85)',
                       opacity: visibleItems[itemIndex] ? 1 : 0,
-                      transitionDelay: visibleItems[itemIndex] ? '100ms' : '0ms',
+                      transitionDelay: visibleItems[itemIndex] ? '200ms' : '0ms',
+                      transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
                     }}
                   >
                     <img
                       src="/assets/images/menu/menu-4.png"
                       alt="Sann's Café Food Menu"
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="w-full h-auto object-contain transition-transform duration-500"
                       width={400}
-                      height={320}
+                      height={600}
                     />
                     <div
                       className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
                       style={{
-                        background: 'linear-gradient(135deg, rgba(212, 165, 116, 0.5), rgba(62, 39, 35, 0.7))',
-                        backdropFilter: 'blur(4px)',
+                        background: 'linear-gradient(135deg, rgba(212, 165, 116, 0.4), rgba(62, 39, 35, 0.5))',
+                        backdropFilter: 'blur(3px)',
                       }}
                     >
-                      <span style={{ color: '#FBF8F3', fontWeight: 'bold', fontSize: '1.3rem' }}>
-                        Menu Showcase
+                      <span style={{ color: '#FBF8F3', fontWeight: 'bold', fontSize: '1.2rem' }}>
+                        Menu
                       </span>
                     </div>
                   </div>
                 </div>
 
-                {/* Food Items - Flashcards */}
+                {/* Food Items - Flashcards with staggered animation */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                   {section.items.map((item, index) => {
                     const currentIndex = itemIndex;
                     itemIndex++;
                     const fromLeft = index % 2 === 0;
+                    const staggerDelay = index * 150; // Each item has 150ms more delay
                     return (
                       <div
                         key={item.name}
@@ -427,7 +434,7 @@ export default function MenuPage() {
                       >
                         <MenuItemCard
                           item={item}
-                          index={index}
+                          index={staggerDelay}
                           isVisible={visibleItems[currentIndex]}
                           fromLeft={fromLeft}
                         />
