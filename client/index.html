@@ -248,6 +248,57 @@
         ]
       }
     </script>
+
+    <!-- Critical CSS for Hero Section - Inline to prevent render-blocking -->
+    <style>
+      /* Ensure Hero section is visible immediately */
+      #home {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      /* Hero background video container */
+      #home > div:first-of-type {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+      
+      /* Hero video - prioritize display */
+      #home video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      
+      /* Hero fallback image */
+      #home img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      
+      /* Hero content overlay text */
+      #home [style*="opacity"] {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+      }
+    </style>
   </head>
 
   <body>

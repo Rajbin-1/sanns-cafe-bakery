@@ -116,6 +116,7 @@ function MenuItemCard({ item, index, isVisible, fromLeft }: MenuItemProps) {
           loading={index > 2 ? 'lazy' : 'eager'}
           width={400}
           height={320}
+          decoding="async"
         />
         {/* Overlay on hover */}
         <div
@@ -168,7 +169,8 @@ function MenuItemCard({ item, index, isVisible, fromLeft }: MenuItemProps) {
 }
 
 export default function MenuPage() {
-  const [visibleItems, setVisibleItems] = useState<boolean[]>(new Array(drinksMenu.length + foodMenu.length).fill(false));
+  // Total items: 2 menu photos sections + 4 drinks items + 2 menu photos sections + 4 food items = 12
+  const [visibleItems, setVisibleItems] = useState<boolean[]>(new Array(12).fill(false));
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
@@ -197,7 +199,8 @@ export default function MenuPage() {
     return () => observer.disconnect();
   }, []);
 
-  let itemIndex = 0;
+  // Index tracker: 0=drinks photos, 1-4=drinks items, 5=food photos, 6-9=food items
+  let currentIndex = 0;
 
   return (
     <section id="menu-page" style={{ backgroundColor: '#FBF8F3' }} className="py-20 relative overflow-hidden">
@@ -268,7 +271,7 @@ export default function MenuPage() {
                 <div
                   className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16"
                   ref={(el) => {
-                    itemRefs.current[itemIndex] = el;
+                    itemRefs.current[currentIndex] = el;
                   }}
                   style={{
                     transition: 'all 700ms cubic-bezier(0.34, 1.56, 0.64, 1)',
@@ -278,9 +281,9 @@ export default function MenuPage() {
                   <div
                     className="relative overflow-hidden rounded-xl shadow-xl group cursor-pointer transition-all duration-700"
                     style={{
-                      transform: visibleItems[itemIndex] ? 'translateX(0) rotate(0deg) scale(1)' : 'translateX(-80px) rotate(-10deg) scale(0.85)',
-                      opacity: visibleItems[itemIndex] ? 1 : 0,
-                      transitionDelay: visibleItems[itemIndex] ? '0ms' : '0ms',
+                      transform: visibleItems[currentIndex] ? 'translateX(0) rotate(0deg) scale(1)' : 'translateX(-80px) rotate(-10deg) scale(0.85)',
+                      opacity: visibleItems[currentIndex] ? 1 : 0,
+                      transitionDelay: visibleItems[currentIndex] ? '0ms' : '0ms',
                       transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
                     }}
                   >
@@ -290,6 +293,8 @@ export default function MenuPage() {
                       className="w-full h-auto object-contain transition-transform duration-500"
                       width={400}
                       height={600}
+                      loading="lazy"
+                      decoding="async"
                     />
                     <div
                       className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
@@ -308,9 +313,9 @@ export default function MenuPage() {
                   <div
                     className="relative overflow-hidden rounded-xl shadow-xl group cursor-pointer transition-all duration-700"
                     style={{
-                      transform: visibleItems[itemIndex] ? 'translateX(0) rotate(0deg) scale(1)' : 'translateX(80px) rotate(10deg) scale(0.85)',
-                      opacity: visibleItems[itemIndex] ? 1 : 0,
-                      transitionDelay: visibleItems[itemIndex] ? '100ms' : '0ms',
+                      transform: visibleItems[currentIndex] ? 'translateX(0) rotate(0deg) scale(1)' : 'translateX(80px) rotate(10deg) scale(0.85)',
+                      opacity: visibleItems[currentIndex] ? 1 : 0,
+                      transitionDelay: visibleItems[currentIndex] ? '100ms' : '0ms',
                       transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
                     }}
                   >
@@ -320,6 +325,8 @@ export default function MenuPage() {
                       className="w-full h-auto object-contain transition-transform duration-500"
                       width={400}
                       height={600}
+                      loading="lazy"
+                      decoding="async"
                     />
                     <div
                       className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
@@ -338,8 +345,8 @@ export default function MenuPage() {
                 {/* Drinks Items - Flashcards with individual animations */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                   {section.items.map((item, index) => {
-                    itemIndex++; // Move to next item index
-                    const currentIndex = itemIndex;
+                    currentIndex++; // Increment for each drink item
+                    const itemCurrentIndex = currentIndex;
                     const fromLeft = index % 2 === 0;
                     // Stagger: first column items (0,2) appear, then second column items (1,3)
                     const staggerDelay = fromLeft ? index * 150 : (index - 1) * 150 + 150;
@@ -347,13 +354,13 @@ export default function MenuPage() {
                       <div
                         key={item.name}
                         ref={(el) => {
-                          itemRefs.current[currentIndex] = el;
+                          itemRefs.current[itemCurrentIndex] = el;
                         }}
                       >
                         <MenuItemCard
                           item={item}
                           index={staggerDelay}
-                          isVisible={visibleItems[currentIndex]}
+                          isVisible={visibleItems[itemCurrentIndex]}
                           fromLeft={fromLeft}
                         />
                       </div>
@@ -368,7 +375,8 @@ export default function MenuPage() {
                 <div
                   className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16"
                   ref={(el) => {
-                    itemRefs.current[itemIndex + drinksMenu.length + 1] = el;
+                    currentIndex++; // Increment for food photos
+                    itemRefs.current[currentIndex] = el;
                   }}
                   style={{
                     transition: 'all 700ms cubic-bezier(0.34, 1.56, 0.64, 1)',
@@ -378,9 +386,9 @@ export default function MenuPage() {
                   <div
                     className="relative overflow-hidden rounded-xl shadow-xl group cursor-pointer transition-all duration-700"
                     style={{
-                      transform: visibleItems[itemIndex + drinksMenu.length + 1] ? 'translateX(0) rotate(0deg) scale(1)' : 'translateX(-80px) rotate(-10deg) scale(0.85)',
-                      opacity: visibleItems[itemIndex + drinksMenu.length + 1] ? 1 : 0,
-                      transitionDelay: visibleItems[itemIndex + drinksMenu.length + 1] ? '0ms' : '0ms',
+                      transform: visibleItems[currentIndex] ? 'translateX(0) rotate(0deg) scale(1)' : 'translateX(-80px) rotate(-10deg) scale(0.85)',
+                      opacity: visibleItems[currentIndex] ? 1 : 0,
+                      transitionDelay: visibleItems[currentIndex] ? '0ms' : '0ms',
                       transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
                     }}
                   >
@@ -390,6 +398,8 @@ export default function MenuPage() {
                       className="w-full h-auto object-contain transition-transform duration-500"
                       width={400}
                       height={600}
+                      loading="lazy"
+                      decoding="async"
                     />
                     <div
                       className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
@@ -408,9 +418,9 @@ export default function MenuPage() {
                   <div
                     className="relative overflow-hidden rounded-xl shadow-xl group cursor-pointer transition-all duration-700"
                     style={{
-                      transform: visibleItems[itemIndex + drinksMenu.length + 1] ? 'translateX(0) rotate(0deg) scale(1)' : 'translateX(80px) rotate(10deg) scale(0.85)',
-                      opacity: visibleItems[itemIndex + drinksMenu.length + 1] ? 1 : 0,
-                      transitionDelay: visibleItems[itemIndex + drinksMenu.length + 1] ? '100ms' : '0ms',
+                      transform: visibleItems[currentIndex] ? 'translateX(0) rotate(0deg) scale(1)' : 'translateX(80px) rotate(10deg) scale(0.85)',
+                      opacity: visibleItems[currentIndex] ? 1 : 0,
+                      transitionDelay: visibleItems[currentIndex] ? '100ms' : '0ms',
                       transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
                     }}
                   >
@@ -420,6 +430,8 @@ export default function MenuPage() {
                       className="w-full h-auto object-contain transition-transform duration-500"
                       width={400}
                       height={600}
+                      loading="lazy"
+                      decoding="async"
                     />
                     <div
                       className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
@@ -438,11 +450,24 @@ export default function MenuPage() {
                 {/* Food Items - Flashcards with individual animations */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                   {section.items.map((item, index) => {
-                    const foodStartIndex = itemIndex + drinksMenu.length + 2;
-                    const currentIndex = foodStartIndex + index;
+                    currentIndex++; // Increment for each food item
+                    const itemCurrentIndex = currentIndex;
                     const fromLeft = index % 2 === 0;
                     // Stagger: first column items (0,2) appear, then second column items (1,3)
                     const staggerDelay = fromLeft ? index * 150 : (index - 1) * 150 + 150;
+                    return (
+                      <div
+                        key={item.name}
+                        ref={(el) => {
+                          itemRefs.current[itemCurrentIndex] = el;
+                        }}
+                      >
+                        <MenuItemCard
+                          item={item}
+                          index={staggerDelay}
+                          isVisible={visibleItems[itemCurrentIndex]}
+                          fromLeft={fromLeft}
+                        />
                     return (
                       <div
                         key={item.name}

@@ -65,7 +65,7 @@ export default function Hero({ onExplore }: HeroProps) {
           autoPlay
           loop={false}
           poster={HERO_POSTER_URL}
-          preload="auto"
+          preload="none"
           fetchPriority="high"
           width={1920}
           height={1080}
@@ -79,6 +79,9 @@ export default function Hero({ onExplore }: HeroProps) {
           alt="Sann's Café & Bakery Gallery Interior - Premium Coffee Shop Atmosphere in Kathmandu"
           className="absolute inset-0 w-full h-full object-cover hidden"
           style={{ display: videoLoaded ? 'none' : 'block' }}
+          width={1920}
+          height={1080}
+          decoding="async"
         />
 
         {/* Subtle White Overlay - 10% opacity */}

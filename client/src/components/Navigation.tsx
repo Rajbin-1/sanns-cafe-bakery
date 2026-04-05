@@ -52,6 +52,7 @@ export default function Navigation({ onNavigate }: NavigationProps) {
             className="w-12 h-12 rounded-full object-cover border-2 transition-all duration-300 hover:scale-110"
             width={48}
             height={48}
+            loading="eager"
             style={{
               borderColor: '#D4A574',
             }}
