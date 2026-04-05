@@ -8,12 +8,6 @@ interface MenuItem {
   image: string;
 }
 
-interface MenuSection {
-  title: string;
-  subtitle: string;
-  items: MenuItem[];
-}
-
 const drinksMenu: MenuItem[] = [
   {
     name: 'Specialty Coffee',
@@ -52,7 +46,7 @@ const foodMenu: MenuItem[] = [
     name: 'Chocolate Brownie',
     price: 'Rs 200-300',
     description: 'Decadent chocolate brownie, fudgy and rich, made with premium dark chocolate.',
-    image: '/assets/images/food/coffee-cake.png',
+    image: '/assets/images/food/hot-chocolate.png',
   },
   {
     name: 'Jhol Momo',
@@ -68,18 +62,22 @@ const foodMenu: MenuItem[] = [
   },
 ];
 
-const menuSections: MenuSection[] = [
-  {
-    title: 'Drinks Menu',
-    subtitle: 'Refreshing Beverages & Hot Drinks',
-    items: drinksMenu,
-  },
-  {
-    title: 'Food Menu',
-    subtitle: 'Delicious Food & Desserts',
-    items: foodMenu,
-  },
-];
+// Fixed index layout (never changes between renders):
+// 0  = drinks photo grid
+// 1  = drinks item 0 (Specialty Coffee)
+// 2  = drinks item 1 (Hot Chocolate)
+// 3  = drinks item 2 (Lemon Tea)
+// 4  = drinks item 3 (Virgin Mojito)
+// 5  = food photo grid
+// 6  = food item 0 (Cheesecake)
+// 7  = food item 1 (Brownie)
+// 8  = food item 2 (Jhol Momo)
+// 9  = food item 3 (Steam Momo)
+const DRINKS_PHOTOS_IDX = 0;
+const DRINKS_ITEMS_START = 1;
+const FOOD_PHOTOS_IDX = 5;
+const FOOD_ITEMS_START = 6;
+const TOTAL_ITEMS = 10;
 
 interface MenuItemProps {
   item: MenuItem;
@@ -91,12 +89,9 @@ interface MenuItemProps {
 function MenuItemCard({ item, index, isVisible, fromLeft }: MenuItemProps) {
   return (
     <div className="mb-12">
-      {/* Flashcard with rotation angle */}
       <div
         className={`relative overflow-hidden rounded-xl shadow-2xl transition-all cursor-pointer group h-80 max-w-sm mx-auto md:mx-0 ${
-          isVisible
-            ? 'opacity-100 scale-100'
-            : 'opacity-0 scale-75'
+          isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
         }`}
         style={{
           transform: isVisible
@@ -118,7 +113,6 @@ function MenuItemCard({ item, index, isVisible, fromLeft }: MenuItemProps) {
           height={320}
           decoding="async"
         />
-        {/* Overlay on hover */}
         <div
           className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center"
           style={{
@@ -132,7 +126,6 @@ function MenuItemCard({ item, index, isVisible, fromLeft }: MenuItemProps) {
         </div>
       </div>
 
-      {/* Info below flashcard */}
       <div
         className={`mt-6 transition-all duration-700 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
@@ -150,17 +143,10 @@ function MenuItemCard({ item, index, isVisible, fromLeft }: MenuItemProps) {
         >
           {item.name}
         </h3>
-
         <p className="text-base mb-4" style={{ color: '#8B7355', lineHeight: '1.6' }}>
           {item.description}
         </p>
-
-        <p
-          className="text-xl font-bold"
-          style={{
-            color: '#D4A574',
-          }}
-        >
+        <p className="text-xl font-bold" style={{ color: '#D4A574' }}>
           {item.price}
         </p>
       </div>
@@ -169,27 +155,25 @@ function MenuItemCard({ item, index, isVisible, fromLeft }: MenuItemProps) {
 }
 
 export default function MenuPage() {
-  // Total items: 2 menu photos sections + 4 drinks items + 2 menu photos sections + 4 food items = 12
-  const [visibleItems, setVisibleItems] = useState<boolean[]>(new Array(12).fill(false));
-  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [visibleItems, setVisibleItems] = useState<boolean[]>(new Array(TOTAL_ITEMS).fill(false));
+  const itemRefs = useRef<(HTMLDivElement | null)[]>(new Array(TOTAL_ITEMS).fill(null));
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           const index = itemRefs.current.indexOf(entry.target as HTMLDivElement);
-          if (index !== -1) {
-            if (entry.isIntersecting) {
-              setVisibleItems((prev) => {
-                const newVisible = [...prev];
-                newVisible[index] = true;
-                return newVisible;
-              });
-            }
+          if (index !== -1 && entry.isIntersecting) {
+            setVisibleItems((prev) => {
+              if (prev[index]) return prev; // already visible, skip re-render
+              const next = [...prev];
+              next[index] = true;
+              return next;
+            });
           }
         });
       },
-      { threshold: 0.3 }
+      { threshold: 0.15 }
     );
 
     itemRefs.current.forEach((ref) => {
@@ -199,24 +183,15 @@ export default function MenuPage() {
     return () => observer.disconnect();
   }, []);
 
-  // Index tracker: 0=drinks photos, 1-4=drinks items, 5=food photos, 6-9=food items
-  let currentIndex = 0;
-
   return (
     <section id="menu-page" style={{ backgroundColor: '#FBF8F3' }} className="py-20 relative overflow-hidden">
-      {/* Decorative background elements */}
       <div
         className="absolute top-10 right-10 w-40 h-40 rounded-full opacity-10 animate-gentle-float"
-        style={{
-          background: 'radial-gradient(circle, #D4A574, transparent)',
-        }}
+        style={{ background: 'radial-gradient(circle, #D4A574, transparent)' }}
       />
       <div
         className="absolute bottom-20 left-10 w-32 h-32 rounded-full opacity-10 animate-gentle-float"
-        style={{
-          background: 'radial-gradient(circle, #A0826D, transparent)',
-          animationDelay: '1s',
-        }}
+        style={{ background: 'radial-gradient(circle, #A0826D, transparent)', animationDelay: '1s' }}
       />
 
       <div className="container relative z-10">
@@ -226,10 +201,7 @@ export default function MenuPage() {
             <Sparkles size={32} style={{ color: '#D4A574' }} className="animate-subtle-glow" />
             <h1
               className="text-5xl md:text-6xl font-bold"
-              style={{
-                fontFamily: "'Playfair Display', serif",
-                color: '#3E2723',
-              }}
+              style={{ fontFamily: "'Playfair Display', serif", color: '#3E2723' }}
             >
               Our Menu
             </h1>
@@ -240,245 +212,217 @@ export default function MenuPage() {
           </p>
         </div>
 
-        {/* Menu Sections */}
-        {menuSections.map((section, sectionIndex) => (
-          <div key={section.title} className="mb-24">
-            {/* Section Title */}
-            <div className="text-center mb-16 animate-fade-in-up">
-              <h2
-                className="text-4xl md:text-5xl font-bold mb-3"
+        {/* ── DRINKS SECTION ── */}
+        <div className="mb-24">
+          <div className="text-center mb-16 animate-fade-in-up">
+            <h2
+              className="text-4xl md:text-5xl font-bold mb-3"
+              style={{ fontFamily: "'Playfair Display', serif", color: '#3E2723' }}
+            >
+              Drinks Menu
+            </h2>
+            <p style={{ color: '#8B7355', fontSize: '1.1rem' }}>Refreshing Beverages & Hot Drinks</p>
+            <div
+              className="w-20 h-1 mx-auto mt-4 rounded-full"
+              style={{ background: 'linear-gradient(90deg, transparent, #D4A574, transparent)' }}
+            />
+          </div>
+
+          {/* Drinks menu photo grid */}
+          <div
+            className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16"
+            ref={(el) => { itemRefs.current[DRINKS_PHOTOS_IDX] = el; }}
+          >
+            <div
+              className="relative overflow-hidden rounded-xl shadow-xl group cursor-pointer transition-all duration-700"
+              style={{
+                transform: visibleItems[DRINKS_PHOTOS_IDX]
+                  ? 'translateX(0) rotate(0deg) scale(1)'
+                  : 'translateX(-80px) rotate(-10deg) scale(0.85)',
+                opacity: visibleItems[DRINKS_PHOTOS_IDX] ? 1 : 0,
+                transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+              }}
+            >
+              <img
+                src="/assets/images/menu/menu-1.png"
+                alt="Sann's Café Drinks Menu"
+                className="w-full h-auto object-contain transition-transform duration-500"
+                width={400}
+                height={600}
+                loading="eager"
+                decoding="async"
+              />
+              <div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
                 style={{
-                  fontFamily: "'Playfair Display', serif",
-                  color: '#3E2723',
+                  background: 'linear-gradient(135deg, rgba(212, 165, 116, 0.4), rgba(62, 39, 35, 0.5))',
+                  backdropFilter: 'blur(3px)',
                 }}
               >
-                {section.title}
-              </h2>
-              <p style={{ color: '#8B7355', fontSize: '1.1rem' }}>
-                {section.subtitle}
-              </p>
-              <div
-                className="w-20 h-1 mx-auto mt-4 rounded-full"
-                style={{
-                  background: 'linear-gradient(90deg, transparent, #D4A574, transparent)',
-                }}
-              />
+                <span style={{ color: '#FBF8F3', fontWeight: 'bold', fontSize: '1.2rem' }}>Menu</span>
+              </div>
             </div>
 
-            {/* Menu Photos using menu-*.png images */}
-            {sectionIndex === 0 && (
-              <div className="mb-16">
-                <div
-                  className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16"
-                  ref={(el) => {
-                    const snapIndex = currentIndex;
-                    if (el) itemRefs.current[snapIndex] = el;
-                  }}
-                  style={{
-                    transition: 'all 700ms cubic-bezier(0.34, 1.56, 0.64, 1)',
-                  }}
-                >
-                  {/* Menu 1 - Drinks */}
-                  <div
-                    className="relative overflow-hidden rounded-xl shadow-xl group cursor-pointer transition-all duration-700"
-                    style={{
-                      transform: visibleItems[currentIndex] ? 'translateX(0) rotate(0deg) scale(1)' : 'translateX(-80px) rotate(-10deg) scale(0.85)',
-                      opacity: visibleItems[currentIndex] ? 1 : 0,
-                      transitionDelay: visibleItems[currentIndex] ? '0ms' : '0ms',
-                      transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-                    }}
-                  >
-                    <img
-                      src="/assets/images/menu/menu-1.png"
-                      alt="Sann's Café Drinks Menu"
-                      className="w-full h-auto object-contain transition-transform duration-500"
-                      width={400}
-                      height={600}
-                      loading="eager"
-                      decoding="async"
-                    />
-                    <div
-                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
-                      style={{
-                        background: 'linear-gradient(135deg, rgba(212, 165, 116, 0.4), rgba(62, 39, 35, 0.5))',
-                        backdropFilter: 'blur(3px)',
-                      }}
-                    >
-                      <span style={{ color: '#FBF8F3', fontWeight: 'bold', fontSize: '1.2rem' }}>
-                        Menu
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Menu 2 - Drinks */}
-                  <div
-                    className="relative overflow-hidden rounded-xl shadow-xl group cursor-pointer transition-all duration-700"
-                    style={{
-                      transform: visibleItems[currentIndex] ? 'translateX(0) rotate(0deg) scale(1)' : 'translateX(80px) rotate(10deg) scale(0.85)',
-                      opacity: visibleItems[currentIndex] ? 1 : 0,
-                      transitionDelay: visibleItems[currentIndex] ? '100ms' : '0ms',
-                      transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-                    }}
-                  >
-                    <img
-                      src="/assets/images/menu/menu-2.png"
-                      alt="Sann's Café Drinks Menu"
-                      className="w-full h-auto object-contain transition-transform duration-500"
-                      width={400}
-                      height={600}
-                      loading="eager"
-                      decoding="async"
-                    />
-                    <div
-                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
-                      style={{
-                        background: 'linear-gradient(135deg, rgba(212, 165, 116, 0.4), rgba(62, 39, 35, 0.5))',
-                        backdropFilter: 'blur(3px)',
-                      }}
-                    >
-                      <span style={{ color: '#FBF8F3', fontWeight: 'bold', fontSize: '1.2rem' }}>
-                        Menu
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Drinks Items - Flashcards with individual animations */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                  {section.items.map((item, index) => {
-                    currentIndex++; // Increment for each drink item
-                    const itemCurrentIndex = currentIndex;
-                    const fromLeft = index % 2 === 0;
-                    // Stagger: first column items (0,2) appear, then second column items (1,3)
-                    const staggerDelay = fromLeft ? index * 150 : (index - 1) * 150 + 150;
-                    return (
-                      <div
-                        key={item.name}
-                        ref={(el) => {
-                          itemRefs.current[itemCurrentIndex] = el;
-                        }}
-                      >
-                        <MenuItemCard
-                          item={item}
-                          index={staggerDelay}
-                          isVisible={visibleItems[itemCurrentIndex]}
-                          fromLeft={fromLeft}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
+            <div
+              className="relative overflow-hidden rounded-xl shadow-xl group cursor-pointer transition-all duration-700"
+              style={{
+                transform: visibleItems[DRINKS_PHOTOS_IDX]
+                  ? 'translateX(0) rotate(0deg) scale(1)'
+                  : 'translateX(80px) rotate(10deg) scale(0.85)',
+                opacity: visibleItems[DRINKS_PHOTOS_IDX] ? 1 : 0,
+                transitionDelay: visibleItems[DRINKS_PHOTOS_IDX] ? '100ms' : '0ms',
+                transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+              }}
+            >
+              <img
+                src="/assets/images/menu/menu-2.png"
+                alt="Sann's Café Drinks Menu"
+                className="w-full h-auto object-contain transition-transform duration-500"
+                width={400}
+                height={600}
+                loading="eager"
+                decoding="async"
+              />
+              <div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(212, 165, 116, 0.4), rgba(62, 39, 35, 0.5))',
+                  backdropFilter: 'blur(3px)',
+                }}
+              >
+                <span style={{ color: '#FBF8F3', fontWeight: 'bold', fontSize: '1.2rem' }}>Menu</span>
               </div>
-            )}
-
-            {sectionIndex === 1 && (
-              <div>
-                <div
-                  className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16"
-                  ref={(el) => {
-                    const snapIndex = currentIndex + 1;
-                    if (el) itemRefs.current[snapIndex] = el;
-                  }}
-                  style={{
-                    transition: 'all 700ms cubic-bezier(0.34, 1.56, 0.64, 1)',
-                  }}
-                >
-                  {/* Menu 3 - Food */}
-                  <div
-                    className="relative overflow-hidden rounded-xl shadow-xl group cursor-pointer transition-all duration-700"
-                    style={{
-                      transform: visibleItems[currentIndex] ? 'translateX(0) rotate(0deg) scale(1)' : 'translateX(-80px) rotate(-10deg) scale(0.85)',
-                      opacity: visibleItems[currentIndex] ? 1 : 0,
-                      transitionDelay: visibleItems[currentIndex] ? '0ms' : '0ms',
-                      transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-                    }}
-                  >
-                    <img
-                      src="/assets/images/menu/menu-3.png"
-                      alt="Sann's Café Food Menu"
-                      className="w-full h-auto object-contain transition-transform duration-500"
-                      width={400}
-                      height={600}
-                      loading="eager"
-                      decoding="async"
-                    />
-                    <div
-                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
-                      style={{
-                        background: 'linear-gradient(135deg, rgba(212, 165, 116, 0.4), rgba(62, 39, 35, 0.5))',
-                        backdropFilter: 'blur(3px)',
-                      }}
-                    >
-                      <span style={{ color: '#FBF8F3', fontWeight: 'bold', fontSize: '1.2rem' }}>
-                        Menu
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Menu 4 - Food */}
-                  <div
-                    className="relative overflow-hidden rounded-xl shadow-xl group cursor-pointer transition-all duration-700"
-                    style={{
-                      transform: visibleItems[currentIndex] ? 'translateX(0) rotate(0deg) scale(1)' : 'translateX(80px) rotate(10deg) scale(0.85)',
-                      opacity: visibleItems[currentIndex] ? 1 : 0,
-                      transitionDelay: visibleItems[currentIndex] ? '100ms' : '0ms',
-                      transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-                    }}
-                  >
-                    <img
-                      src="/assets/images/menu/menu-4.png"
-                      alt="Sann's Café Food Menu"
-                      className="w-full h-auto object-contain transition-transform duration-500"
-                      width={400}
-                      height={600}
-                      loading="eager"
-                      decoding="async"
-                    />
-                    <div
-                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
-                      style={{
-                        background: 'linear-gradient(135deg, rgba(212, 165, 116, 0.4), rgba(62, 39, 35, 0.5))',
-                        backdropFilter: 'blur(3px)',
-                      }}
-                    >
-                      <span style={{ color: '#FBF8F3', fontWeight: 'bold', fontSize: '1.2rem' }}>
-                        Menu
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Food Items - Flashcards with individual animations */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                  {section.items.map((item, index) => {
-                    const foodPhotoIndex = currentIndex + 1;
-                    currentIndex = foodPhotoIndex + index; // Set current to food item indices
-                    const itemCurrentIndex = currentIndex;
-                    const fromLeft = index % 2 === 0;
-                    // Stagger: first column items (0,2) appear, then second column items (1,3)
-                    const staggerDelay = fromLeft ? index * 150 : (index - 1) * 150 + 150;
-                    return (
-                      <div
-                        key={item.name}
-                        ref={(el) => {
-                          const snapIndex = itemCurrentIndex;
-                          if (el) itemRefs.current[snapIndex] = el;
-                        }}
-                      >
-                        <MenuItemCard
-                          item={item}
-                          index={staggerDelay}
-                          isVisible={visibleItems[itemCurrentIndex]}
-                          fromLeft={fromLeft}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
+            </div>
           </div>
-        ))}
+
+          {/* Drinks item cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {drinksMenu.map((item, index) => {
+              const itemIdx = DRINKS_ITEMS_START + index;
+              const fromLeft = index % 2 === 0;
+              const staggerDelay = fromLeft ? index * 150 : (index - 1) * 150 + 150;
+              return (
+                <div
+                  key={item.name}
+                  ref={(el) => { itemRefs.current[itemIdx] = el; }}
+                >
+                  <MenuItemCard
+                    item={item}
+                    index={staggerDelay}
+                    isVisible={visibleItems[itemIdx]}
+                    fromLeft={fromLeft}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* ── FOOD SECTION ── */}
+        <div className="mb-24">
+          <div className="text-center mb-16 animate-fade-in-up">
+            <h2
+              className="text-4xl md:text-5xl font-bold mb-3"
+              style={{ fontFamily: "'Playfair Display', serif", color: '#3E2723' }}
+            >
+              Food Menu
+            </h2>
+            <p style={{ color: '#8B7355', fontSize: '1.1rem' }}>Delicious Food & Desserts</p>
+            <div
+              className="w-20 h-1 mx-auto mt-4 rounded-full"
+              style={{ background: 'linear-gradient(90deg, transparent, #D4A574, transparent)' }}
+            />
+          </div>
+
+          {/* Food menu photo grid */}
+          <div
+            className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16"
+            ref={(el) => { itemRefs.current[FOOD_PHOTOS_IDX] = el; }}
+          >
+            <div
+              className="relative overflow-hidden rounded-xl shadow-xl group cursor-pointer transition-all duration-700"
+              style={{
+                transform: visibleItems[FOOD_PHOTOS_IDX]
+                  ? 'translateX(0) rotate(0deg) scale(1)'
+                  : 'translateX(-80px) rotate(-10deg) scale(0.85)',
+                opacity: visibleItems[FOOD_PHOTOS_IDX] ? 1 : 0,
+                transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+              }}
+            >
+              <img
+                src="/assets/images/menu/menu-3.png"
+                alt="Sann's Café Food Menu"
+                className="w-full h-auto object-contain transition-transform duration-500"
+                width={400}
+                height={600}
+                loading="eager"
+                decoding="async"
+              />
+              <div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(212, 165, 116, 0.4), rgba(62, 39, 35, 0.5))',
+                  backdropFilter: 'blur(3px)',
+                }}
+              >
+                <span style={{ color: '#FBF8F3', fontWeight: 'bold', fontSize: '1.2rem' }}>Menu</span>
+              </div>
+            </div>
+
+            <div
+              className="relative overflow-hidden rounded-xl shadow-xl group cursor-pointer transition-all duration-700"
+              style={{
+                transform: visibleItems[FOOD_PHOTOS_IDX]
+                  ? 'translateX(0) rotate(0deg) scale(1)'
+                  : 'translateX(80px) rotate(10deg) scale(0.85)',
+                opacity: visibleItems[FOOD_PHOTOS_IDX] ? 1 : 0,
+                transitionDelay: visibleItems[FOOD_PHOTOS_IDX] ? '100ms' : '0ms',
+                transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+              }}
+            >
+              <img
+                src="/assets/images/menu/menu-4.png"
+                alt="Sann's Café Food Menu"
+                className="w-full h-auto object-contain transition-transform duration-500"
+                width={400}
+                height={600}
+                loading="eager"
+                decoding="async"
+              />
+              <div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(212, 165, 116, 0.4), rgba(62, 39, 35, 0.5))',
+                  backdropFilter: 'blur(3px)',
+                }}
+              >
+                <span style={{ color: '#FBF8F3', fontWeight: 'bold', fontSize: '1.2rem' }}>Menu</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Food item cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {foodMenu.map((item, index) => {
+              const itemIdx = FOOD_ITEMS_START + index;
+              const fromLeft = index % 2 === 0;
+              const staggerDelay = fromLeft ? index * 150 : (index - 1) * 150 + 150;
+              return (
+                <div
+                  key={item.name}
+                  ref={(el) => { itemRefs.current[itemIdx] = el; }}
+                >
+                  <MenuItemCard
+                    item={item}
+                    index={staggerDelay}
+                    isVisible={visibleItems[itemIdx]}
+                    fromLeft={fromLeft}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
 
         {/* Footer Note */}
         <div className="mt-20 text-center animate-fade-in-up">
