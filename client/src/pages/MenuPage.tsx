@@ -119,7 +119,7 @@ function MenuItemCard({ item, index, isVisible }: MenuItemProps) {
             backdropFilter: 'blur(2px)',
           }}
         >
-          <span style={{ color: 'white', fontWeight: 'bold', fontSize: '1.2rem' }}>
+          <span style={{ color: '#FBF8F3', fontWeight: 'bold', fontSize: '1.2rem' }}>
             ✨ Delicious
           </span>
         </div>

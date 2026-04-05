@@ -135,7 +135,7 @@ export default function Menu() {
                 className="px-6 py-3 rounded-full font-semibold transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 transform"
                 style={{
                   fontFamily: "'Montserrat', sans-serif",
-                  backgroundColor: isActive ? category.color : 'white',
+                  backgroundColor: isActive ? category.color : '#FBF8F3',
                   color: isActive ? 'white' : '#3E2723',
                   border: `2px solid ${category.color}`,
                   boxShadow: isActive ? `0 4px 12px ${category.color}40` : 'none',
@@ -152,7 +152,8 @@ export default function Menu() {
           {currentItems.map((item: MenuItem, index: number) => (
             <div
               key={item.name}
-              className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 animate-fade-in-up border-t-4"
+              className="rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 animate-fade-in-up border-t-4"
+              style={{ backgroundColor: '#FBF8F3' }}
               style={{
                 animationDelay: `${index * 100}ms`,
                 borderColor:
@@ -185,7 +186,7 @@ export default function Menu() {
                       backdropFilter: 'blur(2px)',
                     }}
                   >
-                    <span style={{ color: 'white', fontWeight: 'bold', fontSize: '1.2rem' }}>
+                    <span style={{ color: '#FBF8F3', fontWeight: 'bold', fontSize: '1.2rem' }}>
                       ✨ Delicious
                     </span>
                   </div>

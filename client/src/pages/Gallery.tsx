@@ -79,7 +79,7 @@ function GalleryItem({ image, index, isVisible }: GalleryItemProps) {
         }}
       >
         <div className="text-center">
-          <p style={{ color: 'white', fontWeight: 'bold', fontSize: '1.1rem' }}>
+          <p style={{ color: '#FBF8F3', fontWeight: 'bold', fontSize: '1.1rem' }}>
             {image.title}
           </p>
         </div>

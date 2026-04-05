@@ -48,7 +48,7 @@ const reviews: Review[] = [
 
 export default function Reviews() {
   return (
-    <section id="reviews" className="py-20 bg-white">
+    <section id="reviews" className="py-20" style={{ backgroundColor: '#FBF8F3' }}>
       <div className="container">
         {/* Section Header */}
         <div className="text-center mb-16 animate-fade-in-up">

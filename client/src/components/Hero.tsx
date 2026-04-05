@@ -62,6 +62,7 @@ export default function Hero({ onExplore }: HeroProps) {
           className="hidden md:block absolute inset-0 w-full h-full object-cover"
           muted
           playsInline
+          autoPlay
           loop={false}
           poster={HERO_POSTER_URL}
           preload="auto"
@@ -127,13 +128,14 @@ export default function Hero({ onExplore }: HeroProps) {
         >
           {/* Main Heading */}
           <h1
-            className={`text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-3 md:mb-4 transition-all duration-1000 drop-shadow-lg ${
+            className={`text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-3 md:mb-4 transition-all duration-1000 drop-shadow-lg ${
               showOverlay ? 'scale-100' : 'scale-95'
             }`}
             style={{
               fontFamily: "'Playfair Display', serif",
               textShadow: '3px 3px 12px rgba(0,0,0,0.5)',
               letterSpacing: '1px',
+              color: '#FBF8F3',
             }}
           >
             Sann's Café & Bakery
@@ -171,17 +173,16 @@ export default function Hero({ onExplore }: HeroProps) {
 
           {/* CTA Buttons - Enhanced Visibility */}
           <div
-            className={`flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center transition-all duration-1000 delay-400 ${
-              showOverlay ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-            }`}
+            className={`flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center transition-all duration-1000 delay-400 opacity-100 translate-y-0`}
           >
             <button
               onClick={onExplore}
-              className="px-8 sm:px-10 py-3 sm:py-4 font-bold rounded-lg transition-all duration-300 hover:shadow-2xl hover:scale-110 active:scale-95 text-sm sm:text-base text-white"
+              className="px-8 sm:px-10 py-3 sm:py-4 font-bold rounded-lg transition-all duration-300 hover:shadow-2xl hover:scale-110 active:scale-95 text-sm sm:text-base"
               style={{
                 backgroundColor: '#D4A574',
                 boxShadow: '0 6px 20px rgba(212, 165, 116, 0.4)',
                 fontFamily: "'Montserrat', sans-serif",
+                color: '#FBF8F3',
               }}
             >
               Explore Menu
@@ -194,18 +195,18 @@ export default function Hero({ onExplore }: HeroProps) {
               className="px-8 sm:px-10 py-3 sm:py-4 border-2 font-bold rounded-lg transition-all duration-300 hover:shadow-2xl hover:scale-110 text-sm sm:text-base"
               style={{
                 borderColor: '#D4A574',
-                color: 'white',
+                color: '#FBF8F3',
                 fontFamily: "'Montserrat', sans-serif",
                 backgroundColor: 'rgba(212, 165, 116, 0.2)',
                 backdropFilter: 'blur(4px)',
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = '#D4A574';
-                e.currentTarget.style.color = 'white';
+                e.currentTarget.style.color = '#FBF8F3';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'rgba(212, 165, 116, 0.2)';
-                e.currentTarget.style.color = 'white';
+                e.currentTarget.style.color = '#FBF8F3';
               }}
             >
               Find Us
@@ -217,10 +218,11 @@ export default function Hero({ onExplore }: HeroProps) {
         {!showOverlay && (
           <div className="absolute bottom-6 md:bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
             <svg
-              className="w-6 h-6 md:w-8 md:h-8 text-white drop-shadow-lg"
+              className="w-6 h-6 md:w-8 md:h-8 drop-shadow-lg"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              style={{ color: '#FBF8F3' }}
             >
               <path
                 strokeLinecap="round"

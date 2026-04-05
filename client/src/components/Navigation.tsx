@@ -21,9 +21,9 @@ export default function Navigation({ onNavigate }: NavigationProps) {
   const navLinks = [
     { label: 'Home', id: 'home' },
     { label: 'Menu', id: 'menu' },
-    { label: 'Find Us', id: 'find-us' },
-    { label: 'About & Contact', id: 'about' },
-    { label: 'Reviews', id: 'reviews' },
+    { label: 'About Us', id: 'about' },
+    { label: 'Gallery', id: 'gallery' },
+    { label: 'Find Us', id: 'contacts' },
   ];
 
   const handleNavClick = (id: string) => {
@@ -35,8 +35,8 @@ export default function Navigation({ onNavigate }: NavigationProps) {
     <nav
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
       style={{
-        backgroundColor: isScrolled ? 'white' : 'transparent',
-        boxShadow: isScrolled ? '0 2px 8px rgba(0,0,0,0.1)' : 'none',
+        backgroundColor: '#3E2723',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
       }}
     >
       <div className="container flex items-center justify-between py-4">
@@ -52,13 +52,13 @@ export default function Navigation({ onNavigate }: NavigationProps) {
             width={48}
             height={48}
             style={{
-              borderColor: isScrolled ? '#D4A574' : '#D4C5B9',
+              borderColor: '#D4A574',
             }}
           />
           <span
             className="font-bold text-xl tracking-tight transition-colors duration-300"
             style={{
-              color: isScrolled ? '#3E2723' : 'white',
+              color: '#FBF8F3',
             }}
           >
             Sann's Café
@@ -73,13 +73,13 @@ export default function Navigation({ onNavigate }: NavigationProps) {
               onClick={() => handleNavClick(link.id)}
               className="text-sm font-medium transition-all duration-300 relative pb-1"
               style={{
-                color: isScrolled ? '#3E2723' : 'white',
+                color: '#FBF8F3',
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.color = '#D4A574';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.color = isScrolled ? '#3E2723' : 'white';
+                e.currentTarget.style.color = '#FBF8F3';
               }}
             >
               {link.label}
@@ -102,12 +102,12 @@ export default function Navigation({ onNavigate }: NavigationProps) {
           {isMobileMenuOpen ? (
             <X
               size={24}
-              style={{ color: isScrolled ? '#3E2723' : 'white' }}
+              style={{ color: '#FBF8F3' }}
             />
           ) : (
             <Menu
               size={24}
-              style={{ color: isScrolled ? '#3E2723' : 'white' }}
+              style={{ color: '#FBF8F3' }}
             />
           )}
         </button>
@@ -117,7 +117,7 @@ export default function Navigation({ onNavigate }: NavigationProps) {
       {isMobileMenuOpen && (
         <div
           style={{
-            backgroundColor: isScrolled ? 'white' : 'rgba(62, 39, 35, 0.95)',
+            backgroundColor: '#2C1810',
           }}
         >
           <div className="container py-4 flex flex-col gap-4">
@@ -127,13 +127,13 @@ export default function Navigation({ onNavigate }: NavigationProps) {
                 onClick={() => handleNavClick(link.id)}
                 className="text-left py-2 font-medium transition-all duration-300"
                 style={{
-                  color: isScrolled ? '#3E2723' : 'white',
+                  color: '#FBF8F3',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.color = '#D4A574';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.color = isScrolled ? '#3E2723' : 'white';
+                  e.currentTarget.style.color = '#FBF8F3';
                 }}
               >
                 {link.label}

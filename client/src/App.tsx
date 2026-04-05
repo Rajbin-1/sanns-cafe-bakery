@@ -3,19 +3,17 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
-import Menu from "@/pages/Menu";
 import MenuPage from "@/pages/MenuPage";
 import Gallery from "@/pages/Gallery";
-import FindUs from "@/pages/FindUs";
+import Contacts from "@/pages/Contacts";
 import About from "@/pages/About";
-import Reviews from "@/pages/Reviews";
 import Privacy from "@/pages/Privacy";
 import Terms from "@/pages/Terms";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "./contexts/ThemeContext";
 
 function App() {
-  const [currentPage, setCurrentPage] = useState<'home' | 'menu' | 'privacy' | 'terms'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'menu' | 'about' | 'gallery' | 'find-us' | 'privacy' | 'terms'>('home');
 
   const handleNavigation = (sectionId: string) => {
     if (sectionId === 'menu') {
@@ -24,17 +22,21 @@ function App() {
     } else if (sectionId === 'home') {
       setCurrentPage('home');
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (sectionId === 'about') {
+      setCurrentPage('about');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (sectionId === 'gallery') {
+      setCurrentPage('gallery');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (sectionId === 'contacts') {
+      setCurrentPage('find-us');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (sectionId === 'privacy') {
       setCurrentPage('privacy');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (sectionId === 'terms') {
       setCurrentPage('terms');
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
     }
   };
 
@@ -51,29 +53,35 @@ function App() {
             <main>
               {currentPage === 'home' ? (
                 <>
-                  {/* Hero Section */}
+                  {/* Hero Section Only */}
                   <Hero onExplore={() => handleNavigation("menu")} />
-
-                  {/* Menu Section - Quick Preview */}
-                  <Menu />
-
-                  {/* Gallery Section */}
-                  <Gallery />
-
-                  {/* Find Us Section */}
-                  <FindUs />
-
-                  {/* About & Contact Section */}
-                  <About />
-
-                  {/* Reviews Section */}
-                  <Reviews />
                 </>
               ) : currentPage === 'menu' ? (
                 <>
-                  {/* Full Menu Page - Clean Layout */}
+                  {/* Full Menu Page */}
                   <div style={{ paddingTop: '80px', minHeight: 'calc(100vh - 80px)' }}>
                     <MenuPage />
+                  </div>
+                </>
+              ) : currentPage === 'about' ? (
+                <>
+                  {/* About Us Page */}
+                  <div style={{ paddingTop: '80px' }}>
+                    <About />
+                  </div>
+                </>
+              ) : currentPage === 'gallery' ? (
+                <>
+                  {/* Gallery Page */}
+                  <div style={{ paddingTop: '80px' }}>
+                    <Gallery />
+                  </div>
+                </>
+              ) : currentPage === 'find-us' ? (
+                <>
+                  {/* Find Us Page */}
+                  <div style={{ paddingTop: '80px' }}>
+                    <Contacts />
                   </div>
                 </>
               ) : currentPage === 'privacy' ? (

@@ -1,8 +1,8 @@
 import { MapPin, Clock, Phone, Smartphone } from 'lucide-react';
 
-export default function FindUs() {
+export default function Contacts() {
   return (
-    <section id="find-us" className="py-20 bg-white">
+    <section id="contacts" className="py-20" style={{ backgroundColor: '#FBF8F3' }}>
       <div className="container">
         {/* Section Header */}
         <div className="text-center mb-16 animate-fade-in-up">
@@ -13,10 +13,10 @@ export default function FindUs() {
               color: '#3E2723',
             }}
           >
-            Find Us
+            Contacts
           </h2>
           <p className="text-lg max-w-2xl mx-auto" style={{ color: '#8B7355' }}>
-            Visit us at our location in Tokha, Kathmandu
+            Get in touch with us or visit our location
           </p>
         </div>
 
