@@ -365,14 +365,10 @@ export default function MenuPage() {
 
             {sectionIndex === 1 && (
               <div>
-                {(() => {
-                  itemIndex++; // Increment for food menu photos section
-                  return null;
-                })()} 
                 <div
                   className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16"
                   ref={(el) => {
-                    itemRefs.current[itemIndex] = el;
+                    itemRefs.current[itemIndex + drinksMenu.length + 1] = el;
                   }}
                   style={{
                     transition: 'all 700ms cubic-bezier(0.34, 1.56, 0.64, 1)',
@@ -382,9 +378,9 @@ export default function MenuPage() {
                   <div
                     className="relative overflow-hidden rounded-xl shadow-xl group cursor-pointer transition-all duration-700"
                     style={{
-                      transform: visibleItems[itemIndex] ? 'translateX(0) rotate(0deg) scale(1)' : 'translateX(-80px) rotate(-10deg) scale(0.85)',
-                      opacity: visibleItems[itemIndex] ? 1 : 0,
-                      transitionDelay: visibleItems[itemIndex] ? '0ms' : '0ms',
+                      transform: visibleItems[itemIndex + drinksMenu.length + 1] ? 'translateX(0) rotate(0deg) scale(1)' : 'translateX(-80px) rotate(-10deg) scale(0.85)',
+                      opacity: visibleItems[itemIndex + drinksMenu.length + 1] ? 1 : 0,
+                      transitionDelay: visibleItems[itemIndex + drinksMenu.length + 1] ? '0ms' : '0ms',
                       transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
                     }}
                   >
@@ -412,9 +408,9 @@ export default function MenuPage() {
                   <div
                     className="relative overflow-hidden rounded-xl shadow-xl group cursor-pointer transition-all duration-700"
                     style={{
-                      transform: visibleItems[itemIndex] ? 'translateX(0) rotate(0deg) scale(1)' : 'translateX(80px) rotate(10deg) scale(0.85)',
-                      opacity: visibleItems[itemIndex] ? 1 : 0,
-                      transitionDelay: visibleItems[itemIndex] ? '100ms' : '0ms',
+                      transform: visibleItems[itemIndex + drinksMenu.length + 1] ? 'translateX(0) rotate(0deg) scale(1)' : 'translateX(80px) rotate(10deg) scale(0.85)',
+                      opacity: visibleItems[itemIndex + drinksMenu.length + 1] ? 1 : 0,
+                      transitionDelay: visibleItems[itemIndex + drinksMenu.length + 1] ? '100ms' : '0ms',
                       transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
                     }}
                   >
@@ -442,8 +438,8 @@ export default function MenuPage() {
                 {/* Food Items - Flashcards with individual animations */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                   {section.items.map((item, index) => {
-                    itemIndex++; // Move to next item index
-                    const currentIndex = itemIndex;
+                    const foodStartIndex = itemIndex + drinksMenu.length + 2;
+                    const currentIndex = foodStartIndex + index;
                     const fromLeft = index % 2 === 0;
                     // Stagger: first column items (0,2) appear, then second column items (1,3)
                     const staggerDelay = fromLeft ? index * 150 : (index - 1) * 150 + 150;

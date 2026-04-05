@@ -40,7 +40,7 @@ export default function Navigation({ onNavigate }: NavigationProps) {
         backdropFilter: isScrolled ? 'blur(8px)' : 'none',
       }}
     >
-      <div className="container flex items-center justify-between py-4 px-4">
+      <div className="container flex items-center justify-between py-3 px-4">
         {/* Logo */}
         <div
           className="flex items-center gap-3 cursor-pointer"
