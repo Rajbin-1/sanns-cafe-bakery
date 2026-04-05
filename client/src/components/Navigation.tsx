@@ -69,7 +69,7 @@ export default function Navigation({ onNavigate }: NavigationProps) {
             <button
               key={link.id}
               onClick={() => handleNavClick(link.id)}
-              className="text-sm font-medium transition-all duration-300 relative"
+              className="text-sm font-medium transition-all duration-300 relative pb-1"
               style={{
                 color: isScrolled ? '#3E2723' : 'white',
               }}
@@ -81,6 +81,12 @@ export default function Navigation({ onNavigate }: NavigationProps) {
               }}
             >
               {link.label}
+              <div
+                className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-transparent via-amber-600 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 w-full"
+                style={{
+                  background: 'linear-gradient(to right, transparent, #D4A574, transparent)',
+                }}
+              />
             </button>
           ))}
         </div>

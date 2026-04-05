@@ -4,6 +4,7 @@ import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import Menu from "@/pages/Menu";
+import MenuPage from "@/pages/MenuPage";
 import FindUs from "@/pages/FindUs";
 import About from "@/pages/About";
 import Reviews from "@/pages/Reviews";
@@ -11,10 +12,20 @@ import Footer from "@/components/Footer";
 import { ThemeProvider } from "./contexts/ThemeContext";
 
 function App() {
+  const [currentPage, setCurrentPage] = useState<'home' | 'menu'>('home');
+
   const handleNavigation = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+    if (sectionId === 'menu') {
+      setCurrentPage('menu');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (sectionId === 'home') {
+      setCurrentPage('home');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 
@@ -29,20 +40,40 @@ function App() {
 
             {/* Main Content */}
             <main>
-              {/* Hero Section */}
-              <Hero onExplore={() => handleNavigation("menu")} />
+              {currentPage === 'home' ? (
+                <>
+                  {/* Hero Section */}
+                  <Hero onExplore={() => handleNavigation("menu")} />
 
-              {/* Menu Section */}
-              <Menu />
+                  {/* Menu Section - Quick Preview */}
+                  <Menu />
 
-              {/* Find Us Section */}
-              <FindUs />
+                  {/* Find Us Section */}
+                  <FindUs />
 
-              {/* About & Contact Section */}
-              <About />
+                  {/* About & Contact Section */}
+                  <About />
 
-              {/* Reviews Section */}
-              <Reviews />
+                  {/* Reviews Section */}
+                  <Reviews />
+                </>
+              ) : (
+                <>
+                  {/* Full Menu Page */}
+                  <div style={{ paddingTop: '80px' }}>
+                    <MenuPage />
+                  </div>
+
+                  {/* Find Us Section */}
+                  <FindUs />
+
+                  {/* About & Contact Section */}
+                  <About />
+
+                  {/* Reviews Section */}
+                  <Reviews />
+                </>
+              )}
             </main>
 
             {/* Footer */}

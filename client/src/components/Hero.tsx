@@ -38,12 +38,11 @@ export default function Hero({ onExplore }: HeroProps) {
 
   return (
     <section id="home" className="relative w-full min-h-screen overflow-hidden flex items-center justify-center">
-      {/* Video Background - Responsive sizing */}
-      <div className="absolute inset-0 w-full h-full">
-        {/* Desktop: Video takes full height */}
+      {/* Desktop: Minimized Video Background */}
+      <div className="hidden md:block absolute inset-0 w-full h-full">
         <video
           ref={videoRef}
-          className="hidden md:block absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover"
           autoPlay
           muted
           playsInline
@@ -52,46 +51,41 @@ export default function Hero({ onExplore }: HeroProps) {
         >
           <source src={HERO_VIDEO_URL} type="video/mp4" />
         </video>
+        
+        {/* Enhanced Overlay for Desktop - Stronger for text visibility */}
+        <div
+          className={`absolute inset-0 transition-opacity duration-1000 ${
+            showOverlay ? 'opacity-100' : 'opacity-0'
+          }`}
+          style={{
+            background: 'linear-gradient(135deg, rgba(44, 24, 16, 0.65) 0%, rgba(26, 15, 10, 0.55) 50%, rgba(44, 24, 16, 0.65) 100%)',
+          }}
+        />
 
-        {/* Mobile: Minimized video or poster image */}
-        <div className="md:hidden absolute inset-0 w-full h-full">
-          <img
-            src={HERO_POSTER_URL}
-            alt="Sann's Café Interior"
-            className="w-full h-full object-cover"
-          />
-          <video
-            className="absolute inset-0 w-full h-full object-cover opacity-40"
-            autoPlay
-            muted
-            playsInline
-            loop={true}
-            poster={HERO_POSTER_URL}
-          >
-            <source src={HERO_VIDEO_URL} type="video/mp4" />
-          </video>
-        </div>
+        {/* Decorative gradient overlay for cafe warmth */}
+        <div className="absolute inset-0 opacity-15" style={{
+          background: 'radial-gradient(circle at top right, rgba(212, 165, 116, 0.2), transparent 50%)',
+        }} />
       </div>
 
-      {/* Enhanced Overlay - Stronger on desktop for text visibility */}
-      <div
-        className={`absolute inset-0 transition-opacity duration-1000 ${
-          showOverlay ? 'opacity-100' : 'opacity-0'
-        }`}
-        style={{
-          background: 'linear-gradient(135deg, rgba(44, 24, 16, 0.6) 0%, rgba(26, 15, 10, 0.5) 50%, rgba(44, 24, 16, 0.6) 100%)',
-        }}
-      />
+      {/* Mobile: Full Video Background */}
+      <div className="md:hidden absolute inset-0 w-full h-full">
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          autoPlay
+          muted
+          playsInline
+          loop={true}
+          poster={HERO_POSTER_URL}
+        >
+          <source src={HERO_VIDEO_URL} type="video/mp4" />
+        </video>
 
-      {/* Mobile-specific overlay (stronger) */}
-      <div className="md:hidden absolute inset-0" style={{
-        background: 'linear-gradient(135deg, rgba(44, 24, 16, 0.75) 0%, rgba(26, 15, 10, 0.70) 50%, rgba(44, 24, 16, 0.75) 100%)',
-      }} />
-
-      {/* Decorative gradient overlay for cafe warmth */}
-      <div className="absolute inset-0 opacity-15" style={{
-        background: 'radial-gradient(circle at top right, rgba(212, 165, 116, 0.2), transparent 50%)',
-      }} />
+        {/* Mobile overlay (stronger) */}
+        <div className="absolute inset-0" style={{
+          background: 'linear-gradient(135deg, rgba(44, 24, 16, 0.75) 0%, rgba(26, 15, 10, 0.70) 50%, rgba(44, 24, 16, 0.75) 100%)',
+        }} />
+      </div>
 
       {/* Content Overlay */}
       <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4">
