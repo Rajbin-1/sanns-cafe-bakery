@@ -15,7 +15,7 @@
       "destination": "/api/$1"
     },
     {
-      "source": "/(.*)",
+      "source": "/((?!robots\\.txt|sitemap\\.xml|humans\\.txt|manifest\\.json|.*\\.html$|.*\\.json$|.*\\.xml$|.*\\.txt$).)*",
       "destination": "/index.html"
     }
   ],
