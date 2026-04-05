@@ -24,24 +24,24 @@ const galleryImages: GalleryImage[] = [
     title: 'Coffee Counter',
   },
   {
-    src: '/assets/images/menu/menu-1.png',
-    alt: 'Sann\'s Café Menu - Section 1',
-    title: 'Menu Showcase 1',
+    src: '/assets/images/interior/interior-4.png',
+    alt: 'Sann\'s Café Interior - Ambiance',
+    title: 'Cozy Corner',
   },
   {
-    src: '/assets/images/menu/menu-2.png',
-    alt: 'Sann\'s Café Menu - Section 2',
-    title: 'Menu Showcase 2',
+    src: '/assets/images/interior/interior-5.png',
+    alt: 'Sann\'s Café Interior - Details',
+    title: 'Artistic Details',
   },
   {
-    src: '/assets/images/menu/menu-3.png',
-    alt: 'Sann\'s Café Menu - Section 3',
-    title: 'Menu Showcase 3',
+    src: '/assets/images/interior/interior-6.png',
+    alt: 'Sann\'s Café Interior - Atmosphere',
+    title: 'Café Atmosphere',
   },
   {
-    src: '/assets/images/menu/menu-4.png',
-    alt: 'Sann\'s Café Menu - Section 4',
-    title: 'Menu Showcase 4',
+    src: '/assets/images/interior/interior-7.png',
+    alt: 'Sann\'s Café Interior - Vibe',
+    title: 'Warm Ambiance',
   },
 ];
 
