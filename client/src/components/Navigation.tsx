@@ -83,6 +83,7 @@ export default function Navigation({ onNavigate }: NavigationProps) {
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = '#FBF8F3';
               }}
+              aria-label={`Navigate to ${link.label}`}
             >
               {link.label}
               <div
@@ -137,6 +138,7 @@ export default function Navigation({ onNavigate }: NavigationProps) {
                 onMouseLeave={(e) => {
                   e.currentTarget.style.color = '#FBF8F3';
                 }}
+                aria-label={`Navigate to ${link.label} - Mobile menu`}
               >
                 {link.label}
               </button>

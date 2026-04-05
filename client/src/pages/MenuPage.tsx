@@ -46,7 +46,7 @@ const foodMenu: MenuItem[] = [
     name: 'Chocolate Brownie',
     price: 'Rs 200-300',
     description: 'Decadent chocolate brownie, fudgy and rich, made with premium dark chocolate.',
-    image: '/assets/images/food/cheese-cake.png',
+    image: '/assets/images/food/coffee-cake.png',
   },
   {
     name: 'Jhol Momo',
@@ -93,6 +93,8 @@ function MenuItemCard({ item, index, isVisible, fromLeft }: MenuItemProps) {
         className={`relative overflow-hidden rounded-xl shadow-2xl transition-all cursor-pointer group h-80 max-w-sm mx-auto md:mx-0 ${
           isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
         }`}
+        role="article"
+        aria-label={`${item.name} menu item: ${item.price}`}
         style={{
           transform: isVisible
             ? `translateX(0) rotate(0deg) perspective(1000px)`
@@ -106,12 +108,13 @@ function MenuItemCard({ item, index, isVisible, fromLeft }: MenuItemProps) {
       >
         <img
           src={item.image}
-          alt={item.name}
+          alt={`${item.name} - ${item.description}`}
           className="w-full h-full object-cover transition-transform duration-500"
           loading={index > 2 ? 'lazy' : 'eager'}
           width={400}
           height={320}
           decoding="async"
+          role="img"
         />
         <div
           className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center"

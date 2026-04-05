@@ -149,7 +149,7 @@ export default function Hero({ onExplore }: HeroProps) {
           <div
             className={`flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center transition-all duration-1000 delay-400 opacity-100 translate-y-0`}
           >
-            {/* Button 1 - Explore Menu */}
+            {/* Button 1 - Explore Menu (Primary) */}
             <button
               onClick={onExplore}
               className="px-8 sm:px-10 py-3 sm:py-4 font-bold rounded-lg transition-all duration-300 active:scale-95 text-sm sm:text-base relative overflow-hidden"
@@ -168,32 +168,37 @@ export default function Hero({ onExplore }: HeroProps) {
                 e.currentTarget.style.boxShadow = '0 6px 20px rgba(212, 165, 116, 0.4)';
                 e.currentTarget.style.transform = 'scale(1)';
               }}
+              aria-label="Explore our menu - View drinks, desserts, and food offerings"
             >
               Explore Menu
             </button>
 
-            {/* Button 2 - Find Us */}
+            {/* Button 2 - Find Us (Secondary) */}
             <button
               onClick={() => {
                 const findUsSection = document.getElementById('contacts');
                 findUsSection?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="px-8 sm:px-10 py-3 sm:py-4 font-bold rounded-lg transition-all duration-300 active:scale-95 text-sm sm:text-base relative overflow-hidden"
+              className="px-8 sm:px-10 py-3 sm:py-4 font-bold rounded-lg transition-all duration-300 active:scale-95 text-sm sm:text-base relative overflow-hidden border-2"
               style={{
-                backgroundColor: '#D4A574',
-                boxShadow: '0 6px 20px rgba(212, 165, 116, 0.4)',
+                backgroundColor: 'transparent',
+                borderColor: '#D4A574',
+                boxShadow: '0 6px 20px rgba(212, 165, 116, 0.2)',
                 fontFamily: "'Montserrat', sans-serif",
-                color: '#3E2723',
+                color: '#D4A574',
                 fontWeight: '700',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 30px rgba(212, 165, 116, 0.8), 0 0 60px rgba(160, 130, 109, 0.6), inset 0 0 20px rgba(255,255,255,0.2)';
-                e.currentTarget.style.transform = 'scale(1.08)';
+                e.currentTarget.style.boxShadow = '0 0 30px rgba(212, 165, 116, 0.6), inset 0 0 20px rgba(212, 165, 116, 0.15)';
+                e.currentTarget.style.transform = 'scale(1.05)';
+                e.currentTarget.style.backgroundColor = 'rgba(212, 165, 116, 0.1)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 6px 20px rgba(212, 165, 116, 0.4)';
+                e.currentTarget.style.boxShadow = '0 6px 20px rgba(212, 165, 116, 0.2)';
                 e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.backgroundColor = 'transparent';
               }}
+              aria-label="Find us - View location and hours"
             >
               Find Us
             </button>
