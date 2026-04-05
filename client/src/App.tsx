@@ -5,6 +5,7 @@ import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import Menu from "@/pages/Menu";
 import MenuPage from "@/pages/MenuPage";
+import Gallery from "@/pages/Gallery";
 import FindUs from "@/pages/FindUs";
 import About from "@/pages/About";
 import Reviews from "@/pages/Reviews";
@@ -48,6 +49,9 @@ function App() {
                   {/* Menu Section - Quick Preview */}
                   <Menu />
 
+                  {/* Gallery Section */}
+                  <Gallery />
+
                   {/* Find Us Section */}
                   <FindUs />
 
@@ -59,19 +63,10 @@ function App() {
                 </>
               ) : (
                 <>
-                  {/* Full Menu Page */}
-                  <div style={{ paddingTop: '80px' }}>
+                  {/* Full Menu Page - Clean Layout */}
+                  <div style={{ paddingTop: '80px', minHeight: 'calc(100vh - 80px)' }}>
                     <MenuPage />
                   </div>
-
-                  {/* Find Us Section */}
-                  <FindUs />
-
-                  {/* About & Contact Section */}
-                  <About />
-
-                  {/* Reviews Section */}
-                  <Reviews />
                 </>
               )}
             </main>

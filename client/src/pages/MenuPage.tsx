@@ -48,9 +48,9 @@ const menuItems: MenuItem[] = [
     category: 'Bakery & Signatures',
   },
   {
-    name: 'Chocolate Brownies',
+    name: 'Chocolate Brownie',
     price: 'Rs 200-300',
-    description: 'Decadent chocolate brownies, fudgy and rich, made with premium dark chocolate.',
+    description: 'Decadent chocolate brownie, fudgy and rich, made with premium dark chocolate.',
     image: '/assets/images/food/chowmein.png',
     category: 'Bakery & Signatures',
   },
@@ -160,26 +160,15 @@ function MenuItemCard({ item, index, isVisible }: MenuItemProps) {
           {item.description}
         </p>
 
-        <div className="flex items-center gap-4">
-          <p
-            className="text-2xl font-bold"
-            style={{
-              fontFamily: "'Montserrat', sans-serif",
-              color: '#D4A574',
-            }}
-          >
-            {item.price}
-          </p>
-          <button
-            className="px-6 py-2 rounded-lg font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105 text-white"
-            style={{
-              backgroundColor: '#D4A574',
-              fontFamily: "'Montserrat', sans-serif",
-            }}
-          >
-            Order Now
-          </button>
-        </div>
+        <p
+          className="text-2xl font-bold"
+          style={{
+            fontFamily: "'Montserrat', sans-serif",
+            color: '#D4A574',
+          }}
+        >
+          {item.price}
+        </p>
       </div>
     </div>
   );
@@ -284,7 +273,7 @@ export default function MenuPage() {
               Prices are approximate and may vary. We support NFC mobile payments for your convenience.
             </p>
             <p className="text-sm mt-3" style={{ color: '#A0826D' }}>
-              For special orders or dietary requirements, please contact us via WhatsApp.
+              For orders or special requests, please contact us via WhatsApp or visit us in person.
             </p>
           </div>
         </div>

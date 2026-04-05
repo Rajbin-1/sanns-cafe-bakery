@@ -1,0 +1,46 @@
+{
+  "name": "Sann's Café & Bakery",
+  "short_name": "Sann's Café",
+  "description": "Premium specialty coffee and artisanal bakery in Kathmandu with gallery ambiance",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#3E2723",
+  "background_color": "#FBF8F3",
+  "icons": [
+    {
+      "src": "/assets/images/logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/images/logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/images/logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["food", "restaurant"],
+  "screenshots": [
+    {
+      "src": "/assets/images/interior/interior-1.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/assets/images/interior/interior-1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ]
+}

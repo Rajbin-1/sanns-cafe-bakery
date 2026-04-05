@@ -10,86 +10,108 @@ interface HeroProps {
 export default function Hero({ onExplore }: HeroProps) {
   const [showOverlay, setShowOverlay] = useState(false);
   const [textOpacity, setTextOpacity] = useState(0);
+  const [videoLoaded, setVideoLoaded] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    // Fade in text after 500ms (during first loop)
+    // Fade in text after 500ms
     const textTimer = setTimeout(() => {
       setTextOpacity(1);
     }, 500);
 
-    // Handle video loop completion
-    const handleEnded = () => {
-      // After first loop ends, show overlay
-      setShowOverlay(true);
-      video.play(); // Continue playing
+    // Handle video load
+    const handleCanPlay = () => {
+      setVideoLoaded(true);
+      video.play().catch(() => {
+        // Autoplay failed, show overlay immediately
+        setShowOverlay(true);
+      });
     };
 
+    // Handle video end
+    const handleEnded = () => {
+      setShowOverlay(true);
+      video.play().catch(() => {
+        // Ignore play errors
+      });
+    };
+
+    video.addEventListener('canplay', handleCanPlay);
     video.addEventListener('ended', handleEnded);
+
+    // Start loading the video
+    video.load();
 
     return () => {
       clearTimeout(textTimer);
+      video.removeEventListener('canplay', handleCanPlay);
       video.removeEventListener('ended', handleEnded);
     };
   }, []);
 
   return (
-    <section id="home" className="relative w-full min-h-screen overflow-hidden flex items-center justify-center">
-      {/* Desktop: Minimized Video Background */}
-      <div className="hidden md:block absolute inset-0 w-full h-full">
+    <section id="home" className="relative w-full h-screen overflow-hidden flex items-center justify-center">
+      {/* Background - Desktop: Video, Mobile: Poster */}
+      <div className="absolute inset-0 w-full h-full">
+        {/* Desktop Video */}
         <video
           ref={videoRef}
-          className="absolute inset-0 w-full h-full object-cover"
-          autoPlay
+          className="hidden md:block absolute inset-0 w-full h-full object-cover"
           muted
           playsInline
           loop={false}
           poster={HERO_POSTER_URL}
+          preload="auto"
         >
           <source src={HERO_VIDEO_URL} type="video/mp4" />
         </video>
-        
-        {/* Enhanced Overlay for Desktop - Stronger for text visibility */}
-        <div
-          className={`absolute inset-0 transition-opacity duration-1000 ${
-            showOverlay ? 'opacity-100' : 'opacity-0'
-          }`}
-          style={{
-            background: 'linear-gradient(135deg, rgba(44, 24, 16, 0.65) 0%, rgba(26, 15, 10, 0.55) 50%, rgba(44, 24, 16, 0.65) 100%)',
-          }}
+
+        {/* Mobile: Poster Image */}
+        <img
+          src={HERO_POSTER_URL}
+          alt="Sann's Café Interior"
+          className="md:hidden absolute inset-0 w-full h-full object-cover"
         />
 
-        {/* Decorative gradient overlay for cafe warmth */}
-        <div className="absolute inset-0 opacity-15" style={{
-          background: 'radial-gradient(circle at top right, rgba(212, 165, 116, 0.2), transparent 50%)',
-        }} />
-      </div>
-
-      {/* Mobile: Full Video Background */}
-      <div className="md:hidden absolute inset-0 w-full h-full">
+        {/* Mobile Video Overlay (subtle) */}
         <video
-          className="absolute inset-0 w-full h-full object-cover"
+          className="md:hidden absolute inset-0 w-full h-full object-cover opacity-40"
           autoPlay
           muted
           playsInline
           loop={true}
-          poster={HERO_POSTER_URL}
+          preload="auto"
         >
           <source src={HERO_VIDEO_URL} type="video/mp4" />
         </video>
-
-        {/* Mobile overlay (stronger) */}
-        <div className="absolute inset-0" style={{
-          background: 'linear-gradient(135deg, rgba(44, 24, 16, 0.75) 0%, rgba(26, 15, 10, 0.70) 50%, rgba(44, 24, 16, 0.75) 100%)',
-        }} />
       </div>
 
+      {/* Enhanced Overlay */}
+      <div
+        className={`absolute inset-0 transition-opacity duration-1000 ${
+          showOverlay ? 'opacity-100' : 'opacity-0'
+        }`}
+        style={{
+          background: 'linear-gradient(135deg, rgba(44, 24, 16, 0.65) 0%, rgba(26, 15, 10, 0.55) 50%, rgba(44, 24, 16, 0.65) 100%)',
+        }}
+      />
+
+      {/* Mobile overlay (stronger) */}
+      <div className="md:hidden absolute inset-0" style={{
+        background: 'linear-gradient(135deg, rgba(44, 24, 16, 0.75) 0%, rgba(26, 15, 10, 0.70) 50%, rgba(44, 24, 16, 0.75) 100%)',
+      }} />
+
+      {/* Decorative gradient overlay */}
+      <div className="absolute inset-0 opacity-15" style={{
+        background: 'radial-gradient(circle at top right, rgba(212, 165, 116, 0.2), transparent 50%)',
+      }} />
+
       {/* Content Overlay */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4">
-        {/* Text Container - Fades in during first loop */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4 py-20">
+        {/* Text Container */}
         <div
           className="text-center max-w-4xl transition-opacity duration-1000"
           style={{ opacity: textOpacity }}
@@ -125,7 +147,7 @@ export default function Hero({ onExplore }: HeroProps) {
 
           {/* Description */}
           <p
-            className={`text-xs sm:text-base md:text-lg max-w-2xl mx-auto mb-6 md:mb-8 transition-all duration-1000 delay-300 ${
+            className={`text-xs sm:text-base md:text-lg max-w-2xl mx-auto mb-8 md:mb-12 transition-all duration-1000 delay-300 ${
               showOverlay ? 'opacity-100' : 'opacity-60'
             }`}
             style={{
@@ -138,18 +160,18 @@ export default function Hero({ onExplore }: HeroProps) {
             Premium coffee, artisanal sourdough, and signature desserts in a curated art gallery atmosphere
           </p>
 
-          {/* CTA Buttons */}
+          {/* CTA Buttons - Enhanced Visibility */}
           <div
-            className={`flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center transition-all duration-1000 delay-400 ${
+            className={`flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center transition-all duration-1000 delay-400 ${
               showOverlay ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
             }`}
           >
             <button
               onClick={onExplore}
-              className="px-6 sm:px-8 py-2 sm:py-3 font-semibold rounded-lg transition-all duration-300 hover:shadow-xl hover:scale-105 active:scale-95 text-sm sm:text-base text-white"
+              className="px-8 sm:px-10 py-3 sm:py-4 font-bold rounded-lg transition-all duration-300 hover:shadow-2xl hover:scale-110 active:scale-95 text-sm sm:text-base text-white"
               style={{
                 backgroundColor: '#D4A574',
-                boxShadow: '0 4px 15px rgba(212, 165, 116, 0.3)',
+                boxShadow: '0 6px 20px rgba(212, 165, 116, 0.4)',
                 fontFamily: "'Montserrat', sans-serif",
               }}
             >
@@ -160,12 +182,12 @@ export default function Hero({ onExplore }: HeroProps) {
                 const findUsSection = document.getElementById('find-us');
                 findUsSection?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="px-6 sm:px-8 py-2 sm:py-3 border-2 font-semibold rounded-lg transition-all duration-300 hover:shadow-xl text-sm sm:text-base"
+              className="px-8 sm:px-10 py-3 sm:py-4 border-2 font-bold rounded-lg transition-all duration-300 hover:shadow-2xl hover:scale-110 text-sm sm:text-base"
               style={{
                 borderColor: '#D4A574',
                 color: 'white',
                 fontFamily: "'Montserrat', sans-serif",
-                backgroundColor: 'rgba(212, 165, 116, 0.15)',
+                backgroundColor: 'rgba(212, 165, 116, 0.2)',
                 backdropFilter: 'blur(4px)',
               }}
               onMouseEnter={(e) => {
@@ -173,7 +195,7 @@ export default function Hero({ onExplore }: HeroProps) {
                 e.currentTarget.style.color = 'white';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(212, 165, 116, 0.15)';
+                e.currentTarget.style.backgroundColor = 'rgba(212, 165, 116, 0.2)';
                 e.currentTarget.style.color = 'white';
               }}
             >
@@ -182,7 +204,7 @@ export default function Hero({ onExplore }: HeroProps) {
           </div>
         </div>
 
-        {/* Scroll Indicator - Only show on first loop */}
+        {/* Scroll Indicator */}
         {!showOverlay && (
           <div className="absolute bottom-6 md:bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
             <svg
