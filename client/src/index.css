@@ -43,57 +43,59 @@
 }
 
 :root {
-  /* Sann's Café Color Palette */
+  /* Sann's Café Color Palette - Sophisticated Warm Cafe Tones */
   --chocolate-brown: #3E2723;
-  --saffron-yellow: #F4B860;
+  --deep-brown: #2C1810;
+  --warm-tan: #D4A574;
   --cream: #FBF8F3;
   --warm-gray: #8B7355;
-  --charcoal: #2C2C2C;
   --soft-taupe: #D4C5B9;
+  --accent-brown: #A0826D;
+  --light-cream: #F5F1E8;
 
   /* Primary & Accent Colors */
   --primary: #3E2723;
   --primary-foreground: #FBF8F3;
   --sidebar-primary: #3E2723;
   --sidebar-primary-foreground: #FBF8F3;
-  --chart-1: #F4B860;
-  --chart-2: #8B7355;
+  --chart-1: #D4A574;
+  --chart-2: #A0826D;
   --chart-3: #D4C5B9;
   --chart-4: #3E2723;
-  --chart-5: #2C2C2C;
+  --chart-5: #2C1810;
   --radius: 0.65rem;
 
   /* Light Theme (Default) */
   --background: #FBF8F3;
-  --foreground: #2C2C2C;
+  --foreground: #2C1810;
   --card: #FFFFFF;
-  --card-foreground: #2C2C2C;
+  --card-foreground: #2C1810;
   --popover: #FFFFFF;
-  --popover-foreground: #2C2C2C;
-  --secondary: #F4B860;
+  --popover-foreground: #2C1810;
+  --secondary: #D4A574;
   --secondary-foreground: #3E2723;
   --muted: #D4C5B9;
   --muted-foreground: #8B7355;
-  --accent: #F4B860;
-  --accent-foreground: #3E2723;
-  --destructive: #DC2626;
+  --accent: #A0826D;
+  --accent-foreground: #FFFFFF;
+  --destructive: #C85A54;
   --destructive-foreground: #FFFFFF;
   --border: #D4C5B9;
   --input: #FFFFFF;
-  --ring: #F4B860;
+  --ring: #D4A574;
   --sidebar: #FFFFFF;
-  --sidebar-foreground: #2C2C2C;
-  --sidebar-accent: #F4B860;
+  --sidebar-foreground: #2C1810;
+  --sidebar-accent: #D4A574;
   --sidebar-accent-foreground: #3E2723;
   --sidebar-border: #D4C5B9;
-  --sidebar-ring: #F4B860;
+  --sidebar-ring: #D4A574;
 }
 
 .dark {
-  --primary: #F4B860;
-  --primary-foreground: #3E2723;
-  --sidebar-primary: #F4B860;
-  --sidebar-primary-foreground: #3E2723;
+  --primary: #D4A574;
+  --primary-foreground: #2C1810;
+  --sidebar-primary: #D4A574;
+  --sidebar-primary-foreground: #2C1810;
   --background: #1A1410;
   --foreground: #FBF8F3;
   --card: #2C2420;
@@ -104,24 +106,24 @@
   --secondary-foreground: #FBF8F3;
   --muted: #5C4E47;
   --muted-foreground: #D4C5B9;
-  --accent: #F4B860;
-  --accent-foreground: #3E2723;
-  --destructive: #EF4444;
+  --accent: #D4A574;
+  --accent-foreground: #2C1810;
+  --destructive: #E07856;
   --destructive-foreground: #1A1410;
   --border: #5C4E47;
   --input: #2C2420;
-  --ring: #F4B860;
-  --chart-1: #F4B860;
-  --chart-2: #8B7355;
+  --ring: #D4A574;
+  --chart-1: #D4A574;
+  --chart-2: #A0826D;
   --chart-3: #D4C5B9;
   --chart-4: #FBF8F3;
   --chart-5: #D4C5B9;
   --sidebar: #2C2420;
   --sidebar-foreground: #FBF8F3;
-  --sidebar-accent: #F4B860;
-  --sidebar-accent-foreground: #3E2723;
+  --sidebar-accent: #D4A574;
+  --sidebar-accent-foreground: #2C1810;
   --sidebar-border: #5C4E47;
-  --sidebar-ring: #F4B860;
+  --sidebar-ring: #D4A574;
 }
 
 @layer base {
@@ -234,24 +236,24 @@
   /* Sann's Café Custom Components */
   .btn-primary {
     @apply px-6 py-3 font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105;
-    background-color: var(--saffron-yellow);
-    color: var(--chocolate-brown);
+    background-color: var(--warm-tan);
+    color: white;
   }
 
   .btn-secondary {
     @apply px-6 py-3 bg-transparent border-2 font-semibold rounded-lg transition-all duration-300;
-    border-color: var(--chocolate-brown);
-    color: var(--chocolate-brown);
+    border-color: var(--accent-brown);
+    color: var(--accent-brown);
   }
 
   .btn-secondary:hover {
-    background-color: var(--chocolate-brown);
-    color: var(--cream);
+    background-color: var(--accent-brown);
+    color: white;
   }
 
   .section-divider {
     @apply h-1 my-12;
-    background: linear-gradient(to right, transparent, var(--saffron-yellow), transparent);
+    background: linear-gradient(to right, transparent, var(--warm-tan), var(--accent-brown), transparent);
   }
 
   .gallery-frame {
@@ -316,4 +318,62 @@ html {
 
 .delay-500 {
   animation-delay: 500ms;
+}
+
+/* Subtle Cafe-themed animations */
+@keyframes steamRise {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.9);
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-40px) scale(1.1);
+  }
+}
+
+@keyframes cupRotate {
+  0% {
+    transform: rotateZ(0deg);
+  }
+  100% {
+    transform: rotateZ(360deg);
+  }
+}
+
+@keyframes gentleFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes subtleGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(212, 165, 116, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(212, 165, 116, 0);
+  }
+}
+
+.animate-steam-rise {
+  animation: steamRise 3s ease-out infinite;
+}
+
+.animate-cup-rotate {
+  animation: cupRotate 6s linear infinite;
+}
+
+.animate-gentle-float {
+  animation: gentleFloat 3s ease-in-out infinite;
+}
+
+.animate-subtle-glow {
+  animation: subtleGlow 2s infinite;
 }

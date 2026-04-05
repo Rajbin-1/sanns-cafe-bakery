@@ -37,46 +37,78 @@ export default function Hero({ onExplore }: HeroProps) {
   }, []);
 
   return (
-    <section id="home" className="relative w-full h-screen overflow-hidden">
-      {/* Video Background */}
-      <video
-        ref={videoRef}
-        className="absolute inset-0 w-full h-full object-cover"
-        autoPlay
-        muted
-        playsInline
-        loop={false}
-        poster={HERO_POSTER_URL}
-      >
-        <source src={HERO_VIDEO_URL} type="video/mp4" />
-        <div className="absolute inset-0" style={{ backgroundColor: 'rgba(62, 39, 35, 0.5)' }} />
-      </video>
+    <section id="home" className="relative w-full min-h-screen overflow-hidden flex items-center justify-center">
+      {/* Video Background - Responsive sizing */}
+      <div className="absolute inset-0 w-full h-full">
+        {/* Desktop: Video takes full height */}
+        <video
+          ref={videoRef}
+          className="hidden md:block absolute inset-0 w-full h-full object-cover"
+          autoPlay
+          muted
+          playsInline
+          loop={false}
+          poster={HERO_POSTER_URL}
+        >
+          <source src={HERO_VIDEO_URL} type="video/mp4" />
+        </video>
 
-      {/* Overlay - Fades in after first loop */}
+        {/* Mobile: Minimized video or poster image */}
+        <div className="md:hidden absolute inset-0 w-full h-full">
+          <img
+            src={HERO_POSTER_URL}
+            alt="Sann's Café Interior"
+            className="w-full h-full object-cover"
+          />
+          <video
+            className="absolute inset-0 w-full h-full object-cover opacity-40"
+            autoPlay
+            muted
+            playsInline
+            loop={true}
+            poster={HERO_POSTER_URL}
+          >
+            <source src={HERO_VIDEO_URL} type="video/mp4" />
+          </video>
+        </div>
+      </div>
+
+      {/* Enhanced Overlay - Stronger on desktop for text visibility */}
       <div
         className={`absolute inset-0 transition-opacity duration-1000 ${
           showOverlay ? 'opacity-100' : 'opacity-0'
         }`}
         style={{
-          background: 'linear-gradient(to bottom, rgba(62, 39, 35, 0.4), rgba(62, 39, 35, 0.2))',
+          background: 'linear-gradient(135deg, rgba(44, 24, 16, 0.6) 0%, rgba(26, 15, 10, 0.5) 50%, rgba(44, 24, 16, 0.6) 100%)',
         }}
       />
 
+      {/* Mobile-specific overlay (stronger) */}
+      <div className="md:hidden absolute inset-0" style={{
+        background: 'linear-gradient(135deg, rgba(44, 24, 16, 0.75) 0%, rgba(26, 15, 10, 0.70) 50%, rgba(44, 24, 16, 0.75) 100%)',
+      }} />
+
+      {/* Decorative gradient overlay for cafe warmth */}
+      <div className="absolute inset-0 opacity-15" style={{
+        background: 'radial-gradient(circle at top right, rgba(212, 165, 116, 0.2), transparent 50%)',
+      }} />
+
       {/* Content Overlay */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+      <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4">
         {/* Text Container - Fades in during first loop */}
         <div
-          className="text-center px-4 transition-opacity duration-1000"
+          className="text-center max-w-4xl transition-opacity duration-1000"
           style={{ opacity: textOpacity }}
         >
           {/* Main Heading */}
           <h1
-            className={`text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 transition-all duration-1000 ${
+            className={`text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-3 md:mb-4 transition-all duration-1000 drop-shadow-lg ${
               showOverlay ? 'scale-100' : 'scale-95'
             }`}
             style={{
               fontFamily: "'Playfair Display', serif",
-              textShadow: '2px 2px 8px rgba(0,0,0,0.3)',
+              textShadow: '3px 3px 12px rgba(0,0,0,0.5)',
+              letterSpacing: '1px',
             }}
           >
             Sann's Café & Bakery
@@ -84,13 +116,14 @@ export default function Hero({ onExplore }: HeroProps) {
 
           {/* Subheading */}
           <p
-            className={`text-lg md:text-2xl mb-8 transition-all duration-1000 delay-200 ${
+            className={`text-sm sm:text-lg md:text-2xl mb-4 md:mb-8 transition-all duration-1000 delay-200 ${
               showOverlay ? 'opacity-100' : 'opacity-75'
             }`}
             style={{
               fontFamily: "'Lato', sans-serif",
-              color: '#FBF8F3',
-              textShadow: '1px 1px 4px rgba(0,0,0,0.3)',
+              color: '#F5E6D3',
+              textShadow: '2px 2px 6px rgba(0,0,0,0.4)',
+              fontWeight: 500,
             }}
           >
             Where Artisanal Craft Meets Gallery Ambiance
@@ -98,13 +131,14 @@ export default function Hero({ onExplore }: HeroProps) {
 
           {/* Description */}
           <p
-            className={`text-base md:text-lg max-w-2xl mx-auto mb-8 transition-all duration-1000 delay-300 ${
+            className={`text-xs sm:text-base md:text-lg max-w-2xl mx-auto mb-6 md:mb-8 transition-all duration-1000 delay-300 ${
               showOverlay ? 'opacity-100' : 'opacity-60'
             }`}
             style={{
               fontFamily: "'Lato', sans-serif",
-              color: 'rgba(251, 248, 243, 0.9)',
+              color: 'rgba(251, 248, 243, 0.95)',
               textShadow: '1px 1px 4px rgba(0,0,0,0.3)',
+              lineHeight: '1.8',
             }}
           >
             Premium coffee, artisanal sourdough, and signature desserts in a curated art gallery atmosphere
@@ -112,16 +146,16 @@ export default function Hero({ onExplore }: HeroProps) {
 
           {/* CTA Buttons */}
           <div
-            className={`flex flex-col sm:flex-row gap-4 justify-center transition-all duration-1000 delay-400 ${
+            className={`flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center transition-all duration-1000 delay-400 ${
               showOverlay ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
             }`}
           >
             <button
               onClick={onExplore}
-              className="px-8 py-3 font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105 active:scale-95"
+              className="px-6 sm:px-8 py-2 sm:py-3 font-semibold rounded-lg transition-all duration-300 hover:shadow-xl hover:scale-105 active:scale-95 text-sm sm:text-base text-white"
               style={{
-                backgroundColor: '#F4B860',
-                color: '#3E2723',
+                backgroundColor: '#D4A574',
+                boxShadow: '0 4px 15px rgba(212, 165, 116, 0.3)',
                 fontFamily: "'Montserrat', sans-serif",
               }}
             >
@@ -132,18 +166,20 @@ export default function Hero({ onExplore }: HeroProps) {
                 const findUsSection = document.getElementById('find-us');
                 findUsSection?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="px-8 py-3 border-2 font-semibold rounded-lg transition-all duration-300 hover:shadow-lg"
+              className="px-6 sm:px-8 py-2 sm:py-3 border-2 font-semibold rounded-lg transition-all duration-300 hover:shadow-xl text-sm sm:text-base"
               style={{
-                borderColor: 'white',
+                borderColor: '#D4A574',
                 color: 'white',
                 fontFamily: "'Montserrat', sans-serif",
+                backgroundColor: 'rgba(212, 165, 116, 0.15)',
+                backdropFilter: 'blur(4px)',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'white';
-                e.currentTarget.style.color = '#3E2723';
+                e.currentTarget.style.backgroundColor = '#D4A574';
+                e.currentTarget.style.color = 'white';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
+                e.currentTarget.style.backgroundColor = 'rgba(212, 165, 116, 0.15)';
                 e.currentTarget.style.color = 'white';
               }}
             >
@@ -154,9 +190,9 @@ export default function Hero({ onExplore }: HeroProps) {
 
         {/* Scroll Indicator - Only show on first loop */}
         {!showOverlay && (
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <div className="absolute bottom-6 md:bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
             <svg
-              className="w-6 h-6 text-white"
+              className="w-6 h-6 md:w-8 md:h-8 text-white drop-shadow-lg"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -170,6 +206,15 @@ export default function Hero({ onExplore }: HeroProps) {
             </svg>
           </div>
         )}
+
+        {/* Decorative floating elements */}
+        <div className="absolute top-1/4 left-10 md:left-20 w-20 h-20 md:w-32 md:h-32 rounded-full opacity-10 animate-gentle-float" style={{
+          background: 'radial-gradient(circle, #D4A574, transparent)',
+        }} />
+        <div className="absolute bottom-1/4 right-10 md:right-20 w-16 h-16 md:w-24 md:h-24 rounded-full opacity-10 animate-gentle-float" style={{
+          background: 'radial-gradient(circle, #A0826D, transparent)',
+          animationDelay: '1s',
+        }} />
       </div>
     </section>
   );

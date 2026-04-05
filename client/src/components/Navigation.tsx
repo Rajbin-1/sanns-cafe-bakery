@@ -48,7 +48,10 @@ export default function Navigation({ onNavigate }: NavigationProps) {
           <img 
             src="/assets/images/logo.jpg" 
             alt="Sann's Café & Bakery Logo" 
-            className="w-12 h-12 rounded-full object-cover border-2 border-[#F4B860]"
+            className="w-12 h-12 rounded-full object-cover border-2 transition-all duration-300 hover:scale-110"
+            style={{
+              borderColor: isScrolled ? '#D4A574' : '#D4C5B9',
+            }}
           />
           <span
             className="font-bold text-xl tracking-tight transition-colors duration-300"
@@ -66,12 +69,12 @@ export default function Navigation({ onNavigate }: NavigationProps) {
             <button
               key={link.id}
               onClick={() => handleNavClick(link.id)}
-              className="text-sm font-medium transition-colors duration-300"
+              className="text-sm font-medium transition-all duration-300 relative"
               style={{
                 color: isScrolled ? '#3E2723' : 'white',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#F4B860';
+                e.currentTarget.style.color = '#D4A574';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = isScrolled ? '#3E2723' : 'white';
@@ -114,12 +117,12 @@ export default function Navigation({ onNavigate }: NavigationProps) {
               <button
                 key={link.id}
                 onClick={() => handleNavClick(link.id)}
-                className="text-left py-2 font-medium transition-colors duration-300"
+                className="text-left py-2 font-medium transition-all duration-300"
                 style={{
                   color: isScrolled ? '#3E2723' : 'white',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.color = '#F4B860';
+                  e.currentTarget.style.color = '#D4A574';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.color = isScrolled ? '#3E2723' : 'white';

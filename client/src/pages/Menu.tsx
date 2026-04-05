@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Sparkles } from 'lucide-react';
 
 interface MenuItem {
   name: string;
@@ -74,53 +75,76 @@ const menuData = {
 
 export default function Menu() {
   const [activeCategory, setActiveCategory] = useState('coffee');
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   const categories = [
-    { id: 'coffee', label: 'Coffee & Beverages' },
-    { id: 'bakery', label: 'Bakery' },
-    { id: 'signatures', label: 'Signatures' },
-    { id: 'other', label: 'Other' },
+    { id: 'coffee', label: 'Coffee & Beverages', color: '#D4A574' },
+    { id: 'bakery', label: 'Bakery', color: '#A0826D' },
+    { id: 'signatures', label: 'Signatures', color: '#C89968' },
+    { id: 'other', label: 'Other', color: '#B8956A' },
   ];
 
   const currentItems = menuData[activeCategory as keyof typeof menuData];
 
   return (
-    <section id="menu" style={{ backgroundColor: '#FBF8F3' }} className="py-20">
-      <div className="container">
+    <section id="menu" style={{ backgroundColor: '#FBF8F3' }} className="py-20 relative overflow-hidden">
+      {/* Decorative background elements */}
+      <div
+        className="absolute top-10 right-10 w-40 h-40 rounded-full opacity-10 animate-gentle-float"
+        style={{
+          background: 'radial-gradient(circle, #D4A574, transparent)',
+        }}
+      />
+      <div
+        className="absolute bottom-20 left-10 w-32 h-32 rounded-full opacity-10 animate-gentle-float"
+        style={{
+          background: 'radial-gradient(circle, #A0826D, transparent)',
+          animationDelay: '1s',
+        }}
+      />
+
+      <div className="container relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16 animate-fade-in-up">
-          <h2
-            className="text-4xl md:text-5xl font-bold mb-4"
-            style={{
-              fontFamily: "'Playfair Display', serif",
-              color: '#3E2723',
-            }}
-          >
-            Our Menu
-          </h2>
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <Sparkles size={32} style={{ color: '#D4A574' }} className="animate-subtle-glow" />
+            <h2
+              className="text-4xl md:text-5xl font-bold"
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                color: '#3E2723',
+              }}
+            >
+              Our Menu
+            </h2>
+            <Sparkles size={32} style={{ color: '#D4A574' }} className="animate-subtle-glow" />
+          </div>
           <p className="text-lg max-w-2xl mx-auto" style={{ color: '#8B7355' }}>
             Discover our carefully curated selection of premium coffee, artisanal baked goods, and signature dishes
           </p>
         </div>
 
-        {/* Category Tabs */}
+        {/* Category Tabs - Warm Cafe Colors */}
         <div className="flex flex-wrap justify-center gap-4 mb-12">
-          {categories.map((category) => (
-            <button
-              key={category.id}
-              onClick={() => setActiveCategory(category.id)}
-              className="px-6 py-2 rounded-full font-semibold transition-all duration-300 shadow-md"
-              style={{
-                fontFamily: "'Montserrat', sans-serif",
-                backgroundColor: activeCategory === category.id ? '#F4B860' : 'white',
-                color: activeCategory === category.id ? '#3E2723' : '#3E2723',
-                borderColor: activeCategory === category.id ? '#F4B860' : '#D4C5B9',
-                border: '2px solid',
-              }}
-            >
-              {category.label}
-            </button>
-          ))}
+          {categories.map((category) => {
+            const isActive = activeCategory === category.id;
+            return (
+              <button
+                key={category.id}
+                onClick={() => setActiveCategory(category.id)}
+                className="px-6 py-3 rounded-full font-semibold transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 transform"
+                style={{
+                  fontFamily: "'Montserrat', sans-serif",
+                  backgroundColor: isActive ? category.color : 'white',
+                  color: isActive ? 'white' : '#3E2723',
+                  border: `2px solid ${category.color}`,
+                  boxShadow: isActive ? `0 4px 12px ${category.color}40` : 'none',
+                }}
+              >
+                {category.label}
+              </button>
+            );
+          })}
         </div>
 
         {/* Menu Items Grid */}
@@ -128,16 +152,41 @@ export default function Menu() {
           {currentItems.map((item: MenuItem, index: number) => (
             <div
               key={item.name}
-              className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 animate-fade-in-up"
-              style={{ animationDelay: `${index * 100}ms` }}
+              className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 animate-fade-in-up border-t-4"
+              style={{
+                animationDelay: `${index * 100}ms`,
+                borderColor:
+                  activeCategory === 'coffee'
+                    ? '#D4A574'
+                    : activeCategory === 'bakery'
+                      ? '#A0826D'
+                      : activeCategory === 'signatures'
+                        ? '#C89968'
+                        : '#B8956A',
+              }}
+              onMouseEnter={() => setHoveredItem(item.name)}
+              onMouseLeave={() => setHoveredItem(null)}
             >
               {/* Image */}
-              <div className="h-48 overflow-hidden" style={{ backgroundColor: '#E5E7EB' }}>
+              <div className="h-48 overflow-hidden relative" style={{ backgroundColor: '#E5E7EB' }}>
                 <img
                   src={item.image}
                   alt={item.name}
                   className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
                 />
+                {hoveredItem === item.name && (
+                  <div
+                    className="absolute inset-0 flex items-center justify-center animate-fade-in"
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(212, 165, 116, 0.3), rgba(160, 130, 109, 0.3))',
+                      backdropFilter: 'blur(2px)',
+                    }}
+                  >
+                    <span style={{ color: 'white', fontWeight: 'bold', fontSize: '1.2rem' }}>
+                      ✨ Delicious
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* Content */}
@@ -158,7 +207,7 @@ export default function Menu() {
                   className="text-lg font-bold"
                   style={{
                     fontFamily: "'Montserrat', sans-serif",
-                    color: '#F4B860',
+                    color: '#D4A574',
                   }}
                 >
                   {item.price}
@@ -169,10 +218,18 @@ export default function Menu() {
         </div>
 
         {/* Note */}
-        <div className="mt-16 text-center">
-          <p className="italic" style={{ color: '#8B7355' }}>
-            Prices are approximate and may vary. We support NFC mobile payments for your convenience.
-          </p>
+        <div className="mt-16 text-center animate-fade-in-up">
+          <div
+            className="inline-block px-6 py-4 rounded-lg"
+            style={{
+              background: 'linear-gradient(135deg, rgba(212, 165, 116, 0.1), rgba(160, 130, 109, 0.1))',
+              border: '2px solid rgba(212, 165, 116, 0.2)',
+            }}
+          >
+            <p className="italic" style={{ color: '#8B7355' }}>
+              Prices are approximate and may vary. We support NFC mobile payments for your convenience.
+            </p>
+          </div>
         </div>
       </div>
     </section>
