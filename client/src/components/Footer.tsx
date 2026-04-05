@@ -111,16 +111,49 @@ export default function Footer({ onNavigate }: FooterProps) {
             <h4 className="font-semibold mb-4" style={{ color: '#D4A574', fontSize: '1.1rem' }}>
               Follow Us
             </h4>
-            <a
-              href="https://www.instagram.com/sannscafe25?igsh=Y3NlNmM2am1ranEw"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 transition-all duration-300 hover:scale-110 group"
-              style={{ color: 'rgba(251, 248, 243, 0.9)' }}
-            >
-              <Instagram size={20} className="group-hover:animate-subtle-glow" />
-              <span className="text-sm">@sannscafe25</span>
-            </a>
+            <div className="flex flex-wrap gap-3">
+              <a
+                href="https://www.instagram.com/sannscafe25"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 transition-all duration-300 hover:scale-110 group"
+                style={{ color: 'rgba(251, 248, 243, 0.9)' }}
+                title="Follow us on Instagram"
+              >
+                <Instagram size={20} className="group-hover:animate-subtle-glow" />
+                <span className="text-sm">Instagram</span>
+              </a>
+              <a
+                href="https://www.facebook.com/sannscafe"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 transition-all duration-300 hover:scale-110 group"
+                style={{ color: 'rgba(251, 248, 243, 0.9)' }}
+                title="Follow us on Facebook"
+              >
+                <span className="text-sm">👍 Facebook</span>
+              </a>
+              <a
+                href="https://twitter.com/sannscafe25"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 transition-all duration-300 hover:scale-110 group"
+                style={{ color: 'rgba(251, 248, 243, 0.9)' }}
+                title="Follow us on Twitter/X"
+              >
+                <span className="text-sm">𝕏 Twitter</span>
+              </a>
+              <a
+                href="https://www.youtube.com/@sannscafe"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 transition-all duration-300 hover:scale-110 group"
+                style={{ color: 'rgba(251, 248, 243, 0.9)' }}
+                title="Subscribe to our YouTube channel"
+              >
+                <span className="text-sm">▶️ YouTube</span>
+              </a>
+            </div>
           </div>
         </div>
 
