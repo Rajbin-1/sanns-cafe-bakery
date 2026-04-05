@@ -46,7 +46,7 @@ const foodMenu: MenuItem[] = [
     name: 'Chocolate Brownie',
     price: 'Rs 200-300',
     description: 'Decadent chocolate brownie, fudgy and rich, made with premium dark chocolate.',
-    image: '/assets/images/food/hot-chocolate.png',
+    image: '/assets/images/food/cheese-cake.png',
   },
   {
     name: 'Jhol Momo',

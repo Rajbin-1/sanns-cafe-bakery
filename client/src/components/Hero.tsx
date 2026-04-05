@@ -97,7 +97,7 @@ export default function Hero({ onExplore }: HeroProps) {
       <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4 py-20">
         {/* Text Container */}
         <div
-          className="text-center max-w-4xl transition-opacity duration-1000"
+          className="text-center max-w-4xl w-full mx-auto transition-opacity duration-1000"
           style={{ opacity: textOpacity }}
         >
           {/* Main Heading */}
