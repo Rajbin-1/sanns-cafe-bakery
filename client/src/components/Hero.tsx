@@ -65,6 +65,9 @@ export default function Hero({ onExplore }: HeroProps) {
           loop={false}
           poster={HERO_POSTER_URL}
           preload="auto"
+          fetchPriority="high"
+          width={1920}
+          height={1080}
         >
           <source src={HERO_VIDEO_URL} type="video/mp4" />
         </video>
@@ -72,8 +75,12 @@ export default function Hero({ onExplore }: HeroProps) {
         {/* Mobile: Poster Image */}
         <img
           src={HERO_POSTER_URL}
-          alt="Sann's Café Interior"
+          alt="Sann's Café & Bakery Gallery Interior - Premium Coffee Shop Atmosphere in Kathmandu"
           className="md:hidden absolute inset-0 w-full h-full object-cover"
+          loading="eager"
+          width={1080}
+          height={1920}
+          fetchPriority="high"
         />
 
         {/* Mobile Video Overlay (subtle) */}
@@ -84,6 +91,8 @@ export default function Hero({ onExplore }: HeroProps) {
           playsInline
           loop={true}
           preload="auto"
+          width={1080}
+          height={1920}
         >
           <source src={HERO_VIDEO_URL} type="video/mp4" />
         </video>

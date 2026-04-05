@@ -1,0 +1,13 @@
+/* TEAM */
+  Name: Sann's Café & Bakery Team
+  Site: https://sanns-cafe.vercel.app
+  Twitter: @sannscafe25
+  Location: Tokha, Kathmandu, Nepal
+
+/* THANKS */
+  Built with React, TypeScript, Vite
+  UI by Radix UI & Tailwind CSS
+
+/* SITE */
+  Last Updated: 2026-04-05
+  Standards: HTML5, CSS3, ES6+

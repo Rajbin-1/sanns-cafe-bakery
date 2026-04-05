@@ -1,6 +1,16 @@
 import { Instagram, MapPin, Phone, Coffee } from 'lucide-react';
 
-export default function Footer() {
+interface FooterProps {
+  onNavigate?: (section: string) => void;
+}
+
+export default function Footer({ onNavigate }: FooterProps) {
+  const handleNavClick = (id: string) => {
+    if (onNavigate) {
+      onNavigate(id);
+    }
+  };
+
   return (
     <footer
       style={{
@@ -57,6 +67,10 @@ export default function Footer() {
                 <li key={link.href}>
                   <a
                     href={link.href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleNavClick(link.href.replace('#', ''));
+                    }}
                     className="transition-all duration-300 hover:text-yellow-100 hover:translate-x-1 inline-block"
                     style={{ color: 'rgba(251, 248, 243, 0.9)' }}
                   >
@@ -129,6 +143,30 @@ export default function Footer() {
             <p className="text-xs mt-2" style={{ color: 'rgba(251, 248, 243, 0.7)' }}>
               Open every day to serve you with fresh coffee and warm smiles
             </p>
+          </div>
+
+          {/* Legal Links */}
+          <div className="mb-6 animate-fade-in-up delay-50">
+            <h4 className="font-semibold mb-2" style={{ color: '#D4A574' }}>
+              Legal
+            </h4>
+            <div className="flex gap-4 text-sm flex-wrap">
+              <button
+                onClick={() => handleNavClick('privacy')}
+                className="transition-all duration-300 hover:text-yellow-100"
+                style={{ color: 'rgba(251, 248, 243, 0.9)' }}
+              >
+                Privacy Policy
+              </button>
+              <span style={{ color: 'rgba(251, 248, 243, 0.5)' }}>|</span>
+              <button
+                onClick={() => handleNavClick('terms')}
+                className="transition-all duration-300 hover:text-yellow-100"
+                style={{ color: 'rgba(251, 248, 243, 0.9)' }}
+              >
+                Terms of Service
+              </button>
+            </div>
           </div>
 
           {/* Copyright */}

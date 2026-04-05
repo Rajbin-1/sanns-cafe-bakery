@@ -47,8 +47,10 @@ export default function Navigation({ onNavigate }: NavigationProps) {
         >
           <img 
             src="/assets/images/logo.jpg" 
-            alt="Sann's Café & Bakery Logo" 
+            alt="Sann's Café & Bakery - Premium Coffee & Artisanal Bakery in Kathmandu" 
             className="w-12 h-12 rounded-full object-cover border-2 transition-all duration-300 hover:scale-110"
+            width={48}
+            height={48}
             style={{
               borderColor: isScrolled ? '#D4A574' : '#D4C5B9',
             }}

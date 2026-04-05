@@ -32,6 +32,7 @@ export default function FindUs() {
                 allowFullScreen={true}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
+                title="Google Map showing Sann's Café & Bakery location in Tokha, Kathmandu, Nepal"
               ></iframe>
             </div>
           </div>

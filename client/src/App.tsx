@@ -9,11 +9,13 @@ import Gallery from "@/pages/Gallery";
 import FindUs from "@/pages/FindUs";
 import About from "@/pages/About";
 import Reviews from "@/pages/Reviews";
+import Privacy from "@/pages/Privacy";
+import Terms from "@/pages/Terms";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "./contexts/ThemeContext";
 
 function App() {
-  const [currentPage, setCurrentPage] = useState<'home' | 'menu'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'menu' | 'privacy' | 'terms'>('home');
 
   const handleNavigation = (sectionId: string) => {
     if (sectionId === 'menu') {
@@ -21,6 +23,12 @@ function App() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (sectionId === 'home') {
       setCurrentPage('home');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (sectionId === 'privacy') {
+      setCurrentPage('privacy');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (sectionId === 'terms') {
+      setCurrentPage('terms');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       const element = document.getElementById(sectionId);
@@ -61,18 +69,30 @@ function App() {
                   {/* Reviews Section */}
                   <Reviews />
                 </>
-              ) : (
+              ) : currentPage === 'menu' ? (
                 <>
                   {/* Full Menu Page - Clean Layout */}
                   <div style={{ paddingTop: '80px', minHeight: 'calc(100vh - 80px)' }}>
                     <MenuPage />
                   </div>
                 </>
-              )}
+              ) : currentPage === 'privacy' ? (
+                <>
+                  <div style={{ paddingTop: '80px' }}>
+                    <Privacy />
+                  </div>
+                </>
+              ) : currentPage === 'terms' ? (
+                <>
+                  <div style={{ paddingTop: '80px' }}>
+                    <Terms />
+                  </div>
+                </>
+              ) : null}
             </main>
 
             {/* Footer */}
-            <Footer />
+            <Footer onNavigate={handleNavigation} />
           </div>
         </TooltipProvider>
       </ThemeProvider>

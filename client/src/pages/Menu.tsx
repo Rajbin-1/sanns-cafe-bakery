@@ -171,8 +171,11 @@ export default function Menu() {
               <div className="h-48 overflow-hidden relative" style={{ backgroundColor: '#E5E7EB' }}>
                 <img
                   src={item.image}
-                  alt={item.name}
+                  alt={`${item.name} - ${item.description} at Sann's Café & Bakery Kathmandu`}
                   className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                  loading={index > 2 ? 'lazy' : 'eager'}
+                  width={400}
+                  height={300}
                 />
                 {hoveredItem === item.name && (
                   <div
