@@ -11,74 +11,15 @@ interface MenuItem {
 
 type MenuCategoryKey = 'coffee' | 'bakery' | 'signatures' | 'other'
 
-const fallbackImages: Record<string, string> = {
+const defaultImages: Record<string, string> = {
   'Specialty Coffee': '/assets/images/food/coffee-cake.png',
   'Hot Chocolate': '/assets/images/food/hot-chocolate.png',
-
   'Signature Cheesecake': '/assets/images/food/cheese-cake.png',
   'Chocolate Brownies': '/assets/images/food/chowmein.png',
   'Lemon Tea': '/assets/images/food/lemon-tea.png',
   'Virgin Mojito': '/assets/images/food/virgin-mojito.png',
   'Jhol Momo': '/assets/images/food/jhol-momo.png',
   'Steam Momo': '/assets/images/food/steam-momo.png',
-}
-
-const fallbackMenuData: Record<MenuCategoryKey, MenuItem[]> = {
-  coffee: [
-    {
-      name: 'Specialty Coffee',
-      price: 'Rs 250',
-      description: 'Expertly crafted specialty coffee with premium beans',
-      image: '/assets/images/food/coffee-cake.png',
-    },
-    {
-      name: 'Hot Chocolate',
-      price: 'Rs 200',
-      description: 'Rich and creamy hot chocolate, perfect for any time',
-      image: '/assets/images/food/hot-chocolate.png',
-    },
-  ],
-  bakery: [],
-  signatures: [
-    {
-      name: 'Signature Cheesecake',
-      price: 'Rs 300',
-      description: 'Our signature creamy cheesecake with a perfect balance of flavors',
-      image: '/assets/images/food/cheese-cake.png',
-    },
-    {
-      name: 'Chocolate Brownies',
-      price: 'Rs 200',
-      description: 'Decadent chocolate brownies, fudgy and rich',
-      image: '/assets/images/food/chowmein.png',
-    },
-  ],
-  other: [
-    {
-      name: 'Lemon Tea',
-      price: 'Rs 150',
-      description: 'Refreshing lemon tea with a citrus twist',
-      image: '/assets/images/food/lemon-tea.png',
-    },
-    {
-      name: 'Virgin Mojito',
-      price: 'Rs 200',
-      description: 'Fresh and zesty virgin mojito with mint',
-      image: '/assets/images/food/virgin-mojito.png',
-    },
-    {
-      name: 'Jhol Momo',
-      price: 'Rs 150',
-      description: 'Delicious jhol momo with aromatic broth',
-      image: '/assets/images/food/jhol-momo.png',
-    },
-    {
-      name: 'Steam Momo',
-      price: 'Rs 150',
-      description: 'Perfectly steamed momo with your choice of filling',
-      image: '/assets/images/food/steam-momo.png',
-    },
-  ],
 }
 
 const categoryMap: Record<string, MenuCategoryKey> = {
@@ -90,17 +31,17 @@ const categoryMap: Record<string, MenuCategoryKey> = {
 
 function mapSanityToMenuItem(item: SanityMenuItem): MenuItem {
   const price = item.priceMin ?? 0
-  const image = item.imageUrl ?? fallbackImages[item.name] ?? '/assets/images/food/coffee-cake.png'
+  const image = item.imageUrl ?? defaultImages[item.name] ?? '/assets/images/food/coffee-cake.png'
 
   return {
     name: item.name,
     price: `Rs ${price}`,
-    description: item.description ?? 'Delicious menu item from Sanns Cafe and Bakery',
+    description: item.description ?? 'Delicious menu item',
     image,
   }
 }
 
-function buildMenuData(items: SanityMenuItem[]) {
+function buildMenuData(items: SanityMenuItem[]): Record<MenuCategoryKey, MenuItem[]> {
   const data: Record<MenuCategoryKey, MenuItem[]> = {
     coffee: [],
     bakery: [],
@@ -113,29 +54,28 @@ function buildMenuData(items: SanityMenuItem[]) {
     data[category].push(mapSanityToMenuItem(item))
   })
 
-  return {
-    coffee: data.coffee.length > 0 ? data.coffee : fallbackMenuData.coffee,
-    bakery: data.bakery.length > 0 ? data.bakery : fallbackMenuData.bakery,
-    signatures: data.signatures.length > 0 ? data.signatures : fallbackMenuData.signatures,
-    other: data.other.length > 0 ? data.other : fallbackMenuData.other,
-  }
+  return data
 }
 
 export default function Menu() {
   const [activeCategory, setActiveCategory] = useState<MenuCategoryKey>('coffee')
   const [hoveredItem, setHoveredItem] = useState<string | null>(null)
-  const [menuData, setMenuData] = useState<Record<MenuCategoryKey, MenuItem[]>>(fallbackMenuData)
+  const [menuData, setMenuData] = useState<Record<MenuCategoryKey, MenuItem[]> | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     fetchMenuItems()
       .then((items) => {
         if (items.length > 0) {
           setMenuData(buildMenuData(items))
+        } else {
+          setError('No menu items available')
         }
       })
-      .catch(() => {
-        // Keep fallback data if Sanity is unavailable
+      .catch((err) => {
+        console.error('Failed to fetch menu items:', err)
+        setError('Unable to load menu items')
       })
       .finally(() => {
         setIsLoading(false)
@@ -149,8 +89,6 @@ export default function Menu() {
     { id: 'other', label: 'Other', color: '#B8956A' },
   ]
 
-  const currentItems = menuData[activeCategory]
-
   if (isLoading) {
     return (
       <section id="menu" style={{ backgroundColor: '#FBF8F3' }} className="py-20">
@@ -160,6 +98,18 @@ export default function Menu() {
       </section>
     )
   }
+
+  if (error || !menuData) {
+    return (
+      <section id="menu" style={{ backgroundColor: '#FBF8F3' }} className="py-20">
+        <div className="container text-center">
+          <p style={{ color: '#8B7355' }}>{error || 'No menu items available'}</p>
+        </div>
+      </section>
+    )
+  }
+
+  const currentItems = menuData[activeCategory]
 
   return (
     <section id="menu" style={{ backgroundColor: '#FBF8F3' }} className="py-20 relative overflow-hidden">
