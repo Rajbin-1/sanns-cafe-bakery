@@ -1,46 +1,54 @@
-import { useState } from 'react';
-import { Sparkles } from 'lucide-react';
+import { useEffect, useState } from 'react'
+import { Sparkles } from 'lucide-react'
+import { fetchMenuItems, type SanityMenuItem } from '@/lib/sanity'
 
 interface MenuItem {
-  name: string;
-  price: string;
-  description: string;
-  image: string;
+  name: string
+  price: string
+  description: string
+  image: string
 }
 
-const menuData = {
+type MenuCategoryKey = 'coffee' | 'bakery' | 'signatures' | 'other'
+
+const fallbackImages: Record<string, string> = {
+  'Specialty Coffee': '/assets/images/food/coffee-cake.png',
+  'Hot Chocolate': '/assets/images/food/hot-chocolate.png',
+
+  'Signature Cheesecake': '/assets/images/food/cheese-cake.png',
+  'Chocolate Brownies': '/assets/images/food/chowmein.png',
+  'Lemon Tea': '/assets/images/food/lemon-tea.png',
+  'Virgin Mojito': '/assets/images/food/virgin-mojito.png',
+  'Jhol Momo': '/assets/images/food/jhol-momo.png',
+  'Steam Momo': '/assets/images/food/steam-momo.png',
+}
+
+const fallbackMenuData: Record<MenuCategoryKey, MenuItem[]> = {
   coffee: [
     {
       name: 'Specialty Coffee',
-      price: 'Rs 250-350',
+      price: 'Rs 250',
       description: 'Expertly crafted specialty coffee with premium beans',
       image: '/assets/images/food/coffee-cake.png',
     },
     {
       name: 'Hot Chocolate',
-      price: 'Rs 200-300',
+      price: 'Rs 200',
       description: 'Rich and creamy hot chocolate, perfect for any time',
       image: '/assets/images/food/hot-chocolate.png',
     },
   ],
-  bakery: [
-    {
-      name: 'Artisanal Sourdough',
-      price: 'Rs 150-250',
-      description: 'Freshly baked sourdough with a perfect crust',
-      image: '/assets/images/interior/interior-3.png',
-    },
-  ],
+  bakery: [],
   signatures: [
     {
       name: 'Signature Cheesecake',
-      price: 'Rs 300-400',
+      price: 'Rs 300',
       description: 'Our signature creamy cheesecake with a perfect balance of flavors',
       image: '/assets/images/food/cheese-cake.png',
     },
     {
       name: 'Chocolate Brownies',
-      price: 'Rs 200-300',
+      price: 'Rs 200',
       description: 'Decadent chocolate brownies, fudgy and rich',
       image: '/assets/images/food/chowmein.png',
     },
@@ -48,47 +56,113 @@ const menuData = {
   other: [
     {
       name: 'Lemon Tea',
-      price: 'Rs 150-200',
+      price: 'Rs 150',
       description: 'Refreshing lemon tea with a citrus twist',
       image: '/assets/images/food/lemon-tea.png',
     },
     {
       name: 'Virgin Mojito',
-      price: 'Rs 200-250',
+      price: 'Rs 200',
       description: 'Fresh and zesty virgin mojito with mint',
       image: '/assets/images/food/virgin-mojito.png',
     },
     {
       name: 'Jhol Momo',
-      price: 'Rs 150-200',
+      price: 'Rs 150',
       description: 'Delicious jhol momo with aromatic broth',
       image: '/assets/images/food/jhol-momo.png',
     },
     {
       name: 'Steam Momo',
-      price: 'Rs 150-200',
+      price: 'Rs 150',
       description: 'Perfectly steamed momo with your choice of filling',
       image: '/assets/images/food/steam-momo.png',
     },
   ],
-};
+}
+
+const categoryMap: Record<string, MenuCategoryKey> = {
+  drinks: 'coffee',
+  food: 'signatures',
+  bakery: 'bakery',
+  specials: 'other',
+}
+
+function mapSanityToMenuItem(item: SanityMenuItem): MenuItem {
+  const price = item.priceMin ?? 0
+  const image = item.imageUrl ?? fallbackImages[item.name] ?? '/assets/images/food/coffee-cake.png'
+
+  return {
+    name: item.name,
+    price: `Rs ${price}`,
+    description: item.description ?? 'Delicious menu item from Sanns Cafe and Bakery',
+    image,
+  }
+}
+
+function buildMenuData(items: SanityMenuItem[]) {
+  const data: Record<MenuCategoryKey, MenuItem[]> = {
+    coffee: [],
+    bakery: [],
+    signatures: [],
+    other: [],
+  }
+
+  items.forEach((item) => {
+    const category = categoryMap[item.category] ?? 'other'
+    data[category].push(mapSanityToMenuItem(item))
+  })
+
+  return {
+    coffee: data.coffee.length > 0 ? data.coffee : fallbackMenuData.coffee,
+    bakery: data.bakery.length > 0 ? data.bakery : fallbackMenuData.bakery,
+    signatures: data.signatures.length > 0 ? data.signatures : fallbackMenuData.signatures,
+    other: data.other.length > 0 ? data.other : fallbackMenuData.other,
+  }
+}
 
 export default function Menu() {
-  const [activeCategory, setActiveCategory] = useState('coffee');
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [activeCategory, setActiveCategory] = useState<MenuCategoryKey>('coffee')
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null)
+  const [menuData, setMenuData] = useState<Record<MenuCategoryKey, MenuItem[]>>(fallbackMenuData)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    fetchMenuItems()
+      .then((items) => {
+        if (items.length > 0) {
+          setMenuData(buildMenuData(items))
+        }
+      })
+      .catch(() => {
+        // Keep fallback data if Sanity is unavailable
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
+  }, [])
 
   const categories = [
     { id: 'coffee', label: 'Coffee & Beverages', color: '#D4A574' },
     { id: 'bakery', label: 'Bakery', color: '#A0826D' },
     { id: 'signatures', label: 'Signatures', color: '#C89968' },
     { id: 'other', label: 'Other', color: '#B8956A' },
-  ];
+  ]
 
-  const currentItems = menuData[activeCategory as keyof typeof menuData];
+  const currentItems = menuData[activeCategory]
+
+  if (isLoading) {
+    return (
+      <section id="menu" style={{ backgroundColor: '#FBF8F3' }} className="py-20">
+        <div className="container text-center">
+          <p style={{ color: '#8B7355' }}>Loading menu...</p>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section id="menu" style={{ backgroundColor: '#FBF8F3' }} className="py-20 relative overflow-hidden">
-      {/* Decorative background elements */}
       <div
         className="absolute top-10 right-10 w-40 h-40 rounded-full opacity-10 animate-gentle-float"
         style={{
@@ -104,7 +178,6 @@ export default function Menu() {
       />
 
       <div className="container relative z-10">
-        {/* Section Header */}
         <div className="text-center mb-16 animate-fade-in-up">
           <div className="flex items-center justify-center gap-2 mb-4">
             <Sparkles size={32} style={{ color: '#D4A574' }} className="animate-subtle-glow" />
@@ -124,10 +197,9 @@ export default function Menu() {
           </p>
         </div>
 
-        {/* Category Tabs - Warm Cafe Colors */}
         <div className="flex flex-wrap justify-center gap-4 mb-12">
           {categories.map((category) => {
-            const isActive = activeCategory === category.id;
+            const isActive = activeCategory === category.id
             return (
               <button
                 key={category.id}
@@ -143,18 +215,17 @@ export default function Menu() {
               >
                 {category.label}
               </button>
-            );
+            )
           })}
         </div>
 
-        {/* Menu Items Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {currentItems.map((item: MenuItem, index: number) => (
+          {currentItems.map((item, index) => (
             <div
               key={item.name}
               className="rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 animate-fade-in-up border-t-4"
-              style={{ backgroundColor: '#FBF8F3' }}
               style={{
+                backgroundColor: '#FBF8F3',
                 animationDelay: `${index * 100}ms`,
                 borderColor:
                   activeCategory === 'coffee'
@@ -168,7 +239,6 @@ export default function Menu() {
               onMouseEnter={() => setHoveredItem(item.name)}
               onMouseLeave={() => setHoveredItem(null)}
             >
-              {/* Image */}
               <div className="h-48 overflow-hidden relative" style={{ backgroundColor: '#E5E7EB' }}>
                 <img
                   src={item.image}
@@ -193,7 +263,6 @@ export default function Menu() {
                 )}
               </div>
 
-              {/* Content */}
               <div className="p-6">
                 <h3
                   className="text-xl font-semibold mb-2"
@@ -221,7 +290,6 @@ export default function Menu() {
           ))}
         </div>
 
-        {/* Note */}
         <div className="mt-16 text-center animate-fade-in-up">
           <div
             className="inline-block px-6 py-4 rounded-lg"
@@ -237,5 +305,5 @@ export default function Menu() {
         </div>
       </div>
     </section>
-  );
+  )
 }
