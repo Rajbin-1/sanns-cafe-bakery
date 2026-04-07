@@ -1,98 +1,71 @@
-import { useState, useEffect, useRef } from 'react';
-import { Sparkles } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react'
+import { Sparkles } from 'lucide-react'
+import { fetchMenuItems, type SanityMenuItem } from '@/lib/sanity'
 
 interface MenuItem {
-  name: string;
-  price: string;
-  description: string;
-  image: string;
+  name: string
+  price: string
+  description: string
+  image: string
 }
 
-const drinksMenu: MenuItem[] = [
-  {
-    name: 'Specialty Coffee',
-    price: 'Rs 250-350',
-    description: 'Expertly crafted specialty coffee with premium beans, perfectly roasted and brewed to perfection.',
-    image: '/assets/images/food/coffee-cake.png',
-  },
-  {
-    name: 'Hot Chocolate',
-    price: 'Rs 200-300',
-    description: 'Rich and creamy hot chocolate made with premium cocoa, perfect for any time of day.',
-    image: '/assets/images/food/hot-chocolate.png',
-  },
-  {
-    name: 'Lemon Tea',
-    price: 'Rs 150-200',
-    description: 'Refreshing lemon tea with a citrus twist, brewed fresh and served warm.',
-    image: '/assets/images/food/lemon-tea.png',
-  },
-  {
-    name: 'Virgin Mojito',
-    price: 'Rs 200-250',
-    description: 'Fresh and zesty virgin mojito with mint, lime, and a touch of sugar for the perfect refreshment.',
-    image: '/assets/images/food/virgin-mojito.png',
-  },
-];
+type MenuCategoryKey = 'drinks' | 'food' | 'bakery' | 'specials'
 
-const foodMenu: MenuItem[] = [
-  {
-    name: 'Signature Cheesecake',
-    price: 'Rs 300-400',
-    description: 'Our signature creamy cheesecake with a perfect balance of flavors and a buttery crust.',
-    image: '/assets/images/food/cheese-cake.png',
-  },
-  {
-    name: 'Chocolate Brownie',
-    price: 'Rs 200-300',
-    description: 'Decadent chocolate brownie, fudgy and rich, made with premium dark chocolate.',
-    image: '/assets/images/food/coffee-cake.png',
-  },
-  {
-    name: 'Jhol Momo',
-    price: 'Rs 150-200',
-    description: 'Delicious jhol momo with aromatic broth, served hot with traditional spices.',
-    image: '/assets/images/food/jhol-momo.png',
-  },
-  {
-    name: 'Steam Momo',
-    price: 'Rs 150-200',
-    description: 'Perfectly steamed momo with your choice of filling, tender and flavorful.',
-    image: '/assets/images/food/steam-momo.png',
-  },
-];
+const categoryMap: Record<string, MenuCategoryKey> = {
+  drinks: 'drinks',
+  food: 'food',
+  bakery: 'bakery',
+  specials: 'specials',
+}
 
-// Fixed index layout (never changes between renders):
-// 0  = drinks photo grid
-// 1  = drinks item 0 (Specialty Coffee)
-// 2  = drinks item 1 (Hot Chocolate)
-// 3  = drinks item 2 (Lemon Tea)
-// 4  = drinks item 3 (Virgin Mojito)
-// 5  = food photo grid
-// 6  = food item 0 (Cheesecake)
-// 7  = food item 1 (Brownie)
-// 8  = food item 2 (Jhol Momo)
-// 9  = food item 3 (Steam Momo)
-const DRINKS_PHOTOS_IDX = 0;
-const DRINKS_ITEMS_START = 1;
-const FOOD_PHOTOS_IDX = 5;
-const FOOD_ITEMS_START = 6;
-const TOTAL_ITEMS = 10;
+const defaultImages: Record<string, string> = {
+  'Specialty Coffee': '/assets/images/food/coffee-cake.png',
+  'Hot Chocolate': '/assets/images/food/hot-chocolate.png',
+  'Signature Cheesecake': '/assets/images/food/cheese-cake.png',
+  'Chocolate Brownies': '/assets/images/food/chowmein.png',
+  'Lemon Tea': '/assets/images/food/lemon-tea.png',
+  'Virgin Mojito': '/assets/images/food/virgin-mojito.png',
+  'Jhol Momo': '/assets/images/food/jhol-momo.png',
+  'Steam Momo': '/assets/images/food/steam-momo.png',
+}
+
+function mapSanityToMenuItem(item: SanityMenuItem): MenuItem {
+  const price = item.priceMin ?? 0
+  const image = item.imageUrl ?? defaultImages[item.name] ?? '/assets/images/food/coffee-cake.png'
+  return {
+    name: item.name,
+    price: `Rs ${price}`,
+    description: item.description ?? 'Delicious menu item',
+    image,
+  }
+}
+
+function buildMenuByCategory(items: SanityMenuItem[]): Record<MenuCategoryKey, MenuItem[]> {
+  const data: Record<MenuCategoryKey, MenuItem[]> = {
+    drinks: [],
+    food: [],
+    bakery: [],
+    specials: [],
+  }
+  items.forEach((item) => {
+    const category = categoryMap[item.category] ?? 'specials'
+    data[category].push(mapSanityToMenuItem(item))
+  })
+  return data
+}
 
 interface MenuItemProps {
-  item: MenuItem;
-  index: number;
-  isVisible: boolean;
-  fromLeft: boolean;
+  item: MenuItem
+  index: number
+  isVisible: boolean
+  fromLeft: boolean
 }
 
 function MenuItemCard({ item, index, isVisible, fromLeft }: MenuItemProps) {
   return (
     <div className="mb-12">
       <div
-        className={`relative overflow-hidden rounded-xl shadow-2xl transition-all cursor-pointer group h-80 max-w-sm mx-auto md:mx-0 ${
-          isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
-        }`}
+        className={`relative overflow-hidden rounded-xl shadow-2xl transition-all cursor-pointer group h-80 max-w-sm mx-auto md:mx-0 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}
         role="article"
         aria-label={`${item.name} menu item: ${item.price}`}
         style={{
@@ -113,8 +86,6 @@ function MenuItemCard({ item, index, isVisible, fromLeft }: MenuItemProps) {
           loading={index > 2 ? 'lazy' : 'eager'}
           width={400}
           height={320}
-          decoding="async"
-          role="img"
         />
         <div
           className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center"
@@ -128,21 +99,13 @@ function MenuItemCard({ item, index, isVisible, fromLeft }: MenuItemProps) {
           </span>
         </div>
       </div>
-
       <div
-        className={`mt-6 transition-all duration-700 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-        }`}
-        style={{
-          transitionDelay: isVisible ? `${index + 200}ms` : '0ms',
-        }}
+        className={`mt-6 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+        style={{ transitionDelay: isVisible ? `${index + 200}ms` : '0ms' }}
       >
         <h3
           className="text-2xl md:text-3xl font-bold mb-3"
-          style={{
-            fontFamily: "'Playfair Display', serif",
-            color: '#3E2723',
-          }}
+          style={{ fontFamily: "'Playfair Display', serif", color: '#3E2723' }}
         >
           {item.name}
         </h3>
@@ -154,297 +117,130 @@ function MenuItemCard({ item, index, isVisible, fromLeft }: MenuItemProps) {
         </p>
       </div>
     </div>
-  );
+  )
 }
 
 export default function MenuPage() {
-  const [visibleItems, setVisibleItems] = useState<boolean[]>(new Array(TOTAL_ITEMS).fill(false));
-  const itemRefs = useRef<(HTMLDivElement | null)[]>(new Array(TOTAL_ITEMS).fill(null));
+  const [menuData, setMenuData] = useState<Record<MenuCategoryKey, MenuItem[]> | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [visibleItems, setVisibleItems] = useState<boolean[]>([])
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([])
 
   useEffect(() => {
+    fetchMenuItems()
+      .then((items) => {
+        if (items.length > 0) {
+          const data = buildMenuByCategory(items)
+          setMenuData(data)
+          const totalItems = Object.values(data).reduce((sum, arr) => sum + arr.length, 0)
+          setVisibleItems(new Array(totalItems).fill(false))
+          itemRefs.current = new Array(totalItems).fill(null)
+        } else {
+          setError('No menu items available')
+        }
+      })
+      .catch((err) => {
+        console.error('Failed to fetch menu items:', err)
+        setError('Unable to load menu items')
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
+  }, [])
+
+  useEffect(() => {
+    if (itemRefs.current.length === 0) return
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          const index = itemRefs.current.indexOf(entry.target as HTMLDivElement);
+          const index = itemRefs.current.indexOf(entry.target as HTMLDivElement)
           if (index !== -1 && entry.isIntersecting) {
             setVisibleItems((prev) => {
-              if (prev[index]) return prev; // already visible, skip re-render
-              const next = [...prev];
-              next[index] = true;
-              return next;
-            });
+              if (prev[index]) return prev
+              const next = [...prev]
+              next[index] = true
+              return next
+            })
           }
-        });
+        })
       },
       { threshold: 0.15 }
-    );
-
+    )
     itemRefs.current.forEach((ref) => {
-      if (ref) observer.observe(ref);
-    });
+      if (ref) observer.observe(ref)
+    })
+    return () => observer.disconnect()
+  }, [menuData])
 
-    return () => observer.disconnect();
-  }, []);
+  if (isLoading) {
+    return (
+      <section id="menu-page" style={{ backgroundColor: '#FBF8F3' }} className="py-20">
+        <div className="container text-center">
+          <p style={{ color: '#8B7355' }}>Loading menu...</p>
+        </div>
+      </section>
+    )
+  }
+
+  if (error || !menuData) {
+    return (
+      <section id="menu-page" style={{ backgroundColor: '#FBF8F3' }} className="py-20">
+        <div className="container text-center">
+          <p style={{ color: '#8B7355' }}>{error || 'No menu items available'}</p>
+        </div>
+      </section>
+    )
+  }
+
+  const allItems = Object.values(menuData).flat()
+  const categories = [
+    { key: 'drinks', label: 'Drinks & Beverages' },
+    { key: 'food', label: 'Food' },
+    { key: 'bakery', label: 'Bakery' },
+    { key: 'specials', label: 'Specials' },
+  ]
 
   return (
     <section id="menu-page" style={{ backgroundColor: '#FBF8F3' }} className="py-20 relative overflow-hidden">
-      <div
-        className="absolute top-10 right-10 w-40 h-40 rounded-full opacity-10 animate-gentle-float"
-        style={{ background: 'radial-gradient(circle, #D4A574, transparent)' }}
-      />
-      <div
-        className="absolute bottom-20 left-10 w-32 h-32 rounded-full opacity-10 animate-gentle-float"
-        style={{ background: 'radial-gradient(circle, #A0826D, transparent)', animationDelay: '1s' }}
-      />
-
+      <div className="absolute top-10 right-10 w-40 h-40 rounded-full opacity-10 animate-gentle-float" style={{ background: 'radial-gradient(circle, #D4A574, transparent)' }} />
+      <div className="absolute bottom-20 left-10 w-32 h-32 rounded-full opacity-10 animate-gentle-float" style={{ background: 'radial-gradient(circle, #A0826D, transparent)', animationDelay: '1s' }} />
       <div className="container relative z-10">
-        {/* Section Header */}
         <div className="text-center mb-20 animate-fade-in-up">
           <div className="flex items-center justify-center gap-2 mb-4">
             <Sparkles size={32} style={{ color: '#D4A574' }} className="animate-subtle-glow" />
-            <h1
-              className="text-5xl md:text-6xl font-bold"
-              style={{ fontFamily: "'Playfair Display', serif", color: '#3E2723' }}
-            >
-              Our Menu
+            <h1 className="text-5xl md:text-6xl font-bold" style={{ fontFamily: "'Playfair Display', serif", color: '#3E2723' }}>
+              Our Full Menu
             </h1>
             <Sparkles size={32} style={{ color: '#D4A574' }} className="animate-subtle-glow" />
           </div>
-          <p className="text-xl max-w-3xl mx-auto" style={{ color: '#8B7355' }}>
-            Discover our carefully curated selection of premium coffee, artisanal baked goods, and signature dishes. Each item is crafted with passion and served with love.
+          <p className="text-lg max-w-2xl mx-auto" style={{ color: '#8B7355' }}>
+            Explore our complete menu of premium coffee, delicious food, and artisanal baked goods
           </p>
         </div>
-
-        {/* ── DRINKS SECTION ── */}
-        <div className="mb-24">
-          <div className="text-center mb-16 animate-fade-in-up">
-            <h2
-              className="text-4xl md:text-5xl font-bold mb-3"
-              style={{ fontFamily: "'Playfair Display', serif", color: '#3E2723' }}
-            >
-              Drinks Menu
-            </h2>
-            <p style={{ color: '#8B7355', fontSize: '1.1rem' }}>Refreshing Beverages & Hot Drinks</p>
-            <div
-              className="w-20 h-1 mx-auto mt-4 rounded-full"
-              style={{ background: 'linear-gradient(90deg, transparent, #D4A574, transparent)' }}
-            />
-          </div>
-
-          {/* Drinks menu photo grid */}
-          <div
-            className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16"
-            ref={(el) => { itemRefs.current[DRINKS_PHOTOS_IDX] = el; }}
-          >
-            <div
-              className="relative overflow-hidden rounded-xl shadow-xl group cursor-pointer transition-all duration-700"
-              style={{
-                transform: visibleItems[DRINKS_PHOTOS_IDX]
-                  ? 'translateX(0) rotate(0deg) scale(1)'
-                  : 'translateX(-80px) rotate(-10deg) scale(0.85)',
-                opacity: visibleItems[DRINKS_PHOTOS_IDX] ? 1 : 0,
-                transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-              }}
-            >
-              <img
-                src="/assets/images/menu/menu-1.png"
-                alt="Sann's Café Drinks Menu"
-                className="w-full h-auto object-contain transition-transform duration-500"
-                width={400}
-                height={600}
-                loading="eager"
-                decoding="async"
-              />
-              <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(212, 165, 116, 0.4), rgba(62, 39, 35, 0.5))',
-                  backdropFilter: 'blur(3px)',
-                }}
-              >
-                <span style={{ color: '#FBF8F3', fontWeight: 'bold', fontSize: '1.2rem' }}>Menu</span>
+        {categories.map((category) => {
+          const categoryKey = category.key as MenuCategoryKey
+          const items = menuData[categoryKey]
+          if (items.length === 0) return null
+          return (
+            <div key={categoryKey} className="mb-24">
+              <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center" style={{ fontFamily: "'Playfair Display', serif", color: '#3E2723' }}>
+                {category.label}
+              </h2>
+              <div className="space-y-16">
+                {items.map((item, idx) => {
+                  const overallIndex = allItems.findIndex((i) => i.name === item.name && i.price === item.price)
+                  return (
+                    <div key={`${categoryKey}-${idx}`} ref={(el) => { if (el) itemRefs.current[overallIndex] = el }}>
+                      <MenuItemCard item={item} index={overallIndex} isVisible={visibleItems[overallIndex] ?? false} fromLeft={overallIndex % 2 === 0} />
+                    </div>
+                  )
+                })}
               </div>
             </div>
-
-            <div
-              className="relative overflow-hidden rounded-xl shadow-xl group cursor-pointer transition-all duration-700"
-              style={{
-                transform: visibleItems[DRINKS_PHOTOS_IDX]
-                  ? 'translateX(0) rotate(0deg) scale(1)'
-                  : 'translateX(80px) rotate(10deg) scale(0.85)',
-                opacity: visibleItems[DRINKS_PHOTOS_IDX] ? 1 : 0,
-                transitionDelay: visibleItems[DRINKS_PHOTOS_IDX] ? '100ms' : '0ms',
-                transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-              }}
-            >
-              <img
-                src="/assets/images/menu/menu-2.png"
-                alt="Sann's Café Drinks Menu"
-                className="w-full h-auto object-contain transition-transform duration-500"
-                width={400}
-                height={600}
-                loading="eager"
-                decoding="async"
-              />
-              <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(212, 165, 116, 0.4), rgba(62, 39, 35, 0.5))',
-                  backdropFilter: 'blur(3px)',
-                }}
-              >
-                <span style={{ color: '#FBF8F3', fontWeight: 'bold', fontSize: '1.2rem' }}>Menu</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Drinks item cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {drinksMenu.map((item, index) => {
-              const itemIdx = DRINKS_ITEMS_START + index;
-              const fromLeft = index % 2 === 0;
-              const staggerDelay = fromLeft ? index * 150 : (index - 1) * 150 + 150;
-              return (
-                <div
-                  key={item.name}
-                  ref={(el) => { itemRefs.current[itemIdx] = el; }}
-                >
-                  <MenuItemCard
-                    item={item}
-                    index={staggerDelay}
-                    isVisible={visibleItems[itemIdx]}
-                    fromLeft={fromLeft}
-                  />
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* ── FOOD SECTION ── */}
-        <div className="mb-24">
-          <div className="text-center mb-16 animate-fade-in-up">
-            <h2
-              className="text-4xl md:text-5xl font-bold mb-3"
-              style={{ fontFamily: "'Playfair Display', serif", color: '#3E2723' }}
-            >
-              Food Menu
-            </h2>
-            <p style={{ color: '#8B7355', fontSize: '1.1rem' }}>Delicious Food & Desserts</p>
-            <div
-              className="w-20 h-1 mx-auto mt-4 rounded-full"
-              style={{ background: 'linear-gradient(90deg, transparent, #D4A574, transparent)' }}
-            />
-          </div>
-
-          {/* Food menu photo grid */}
-          <div
-            className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16"
-            ref={(el) => { itemRefs.current[FOOD_PHOTOS_IDX] = el; }}
-          >
-            <div
-              className="relative overflow-hidden rounded-xl shadow-xl group cursor-pointer transition-all duration-700"
-              style={{
-                transform: visibleItems[FOOD_PHOTOS_IDX]
-                  ? 'translateX(0) rotate(0deg) scale(1)'
-                  : 'translateX(-80px) rotate(-10deg) scale(0.85)',
-                opacity: visibleItems[FOOD_PHOTOS_IDX] ? 1 : 0,
-                transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-              }}
-            >
-              <img
-                src="/assets/images/menu/menu-3.png"
-                alt="Sann's Café Food Menu"
-                className="w-full h-auto object-contain transition-transform duration-500"
-                width={400}
-                height={600}
-                loading="eager"
-                decoding="async"
-              />
-              <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(212, 165, 116, 0.4), rgba(62, 39, 35, 0.5))',
-                  backdropFilter: 'blur(3px)',
-                }}
-              >
-                <span style={{ color: '#FBF8F3', fontWeight: 'bold', fontSize: '1.2rem' }}>Menu</span>
-              </div>
-            </div>
-
-            <div
-              className="relative overflow-hidden rounded-xl shadow-xl group cursor-pointer transition-all duration-700"
-              style={{
-                transform: visibleItems[FOOD_PHOTOS_IDX]
-                  ? 'translateX(0) rotate(0deg) scale(1)'
-                  : 'translateX(80px) rotate(10deg) scale(0.85)',
-                opacity: visibleItems[FOOD_PHOTOS_IDX] ? 1 : 0,
-                transitionDelay: visibleItems[FOOD_PHOTOS_IDX] ? '100ms' : '0ms',
-                transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-              }}
-            >
-              <img
-                src="/assets/images/menu/menu-4.png"
-                alt="Sann's Café Food Menu"
-                className="w-full h-auto object-contain transition-transform duration-500"
-                width={400}
-                height={600}
-                loading="eager"
-                decoding="async"
-              />
-              <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(212, 165, 116, 0.4), rgba(62, 39, 35, 0.5))',
-                  backdropFilter: 'blur(3px)',
-                }}
-              >
-                <span style={{ color: '#FBF8F3', fontWeight: 'bold', fontSize: '1.2rem' }}>Menu</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Food item cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {foodMenu.map((item, index) => {
-              const itemIdx = FOOD_ITEMS_START + index;
-              const fromLeft = index % 2 === 0;
-              const staggerDelay = fromLeft ? index * 150 : (index - 1) * 150 + 150;
-              return (
-                <div
-                  key={item.name}
-                  ref={(el) => { itemRefs.current[itemIdx] = el; }}
-                >
-                  <MenuItemCard
-                    item={item}
-                    index={staggerDelay}
-                    isVisible={visibleItems[itemIdx]}
-                    fromLeft={fromLeft}
-                  />
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Footer Note */}
-        <div className="mt-20 text-center animate-fade-in-up">
-          <div
-            className="inline-block px-8 py-6 rounded-lg"
-            style={{
-              background: 'linear-gradient(135deg, rgba(212, 165, 116, 0.1), rgba(160, 130, 109, 0.1))',
-              border: '2px solid rgba(212, 165, 116, 0.2)',
-            }}
-          >
-            <p className="text-lg" style={{ color: '#8B7355' }}>
-              Prices are approximate and may vary. We support NFC mobile payments for your convenience.
-            </p>
-            <p className="text-sm mt-3" style={{ color: '#A0826D' }}>
-              For orders or special requests, please contact us via WhatsApp or visit us in person.
-            </p>
-          </div>
-        </div>
+          )
+        })}
       </div>
     </section>
-  );
+  )
 }
