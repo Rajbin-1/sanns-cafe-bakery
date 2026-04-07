@@ -1,4 +1,6 @@
 import { Heart, MessageCircle, Coffee, Sparkles, Star } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { fetchReviews, type SanityReview } from '@/lib/sanity';
 
 interface Review {
   name: string;
@@ -7,7 +9,7 @@ interface Review {
   date: string;
 }
 
-const reviews: Review[] = [
+const defaultReviews: Review[] = [
   {
     name: 'Tush',
     rating: 5,
@@ -46,11 +48,37 @@ const reviews: Review[] = [
   },
 ];
 
+function mapSanityReviewToReview(item: SanityReview): Review {
+  return {
+    name: item.reviewerName,
+    rating: item.rating,
+    text: item.reviewText,
+    date: item.reviewDate,
+  };
+}
+
 export default function About() {
+  const [reviews, setReviews] = useState<Review[]>(defaultReviews);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchReviews()
+      .then((sanityReviews) => {
+        if (sanityReviews.length > 0) {
+          setReviews(sanityReviews.map(mapSanityReviewToReview));
+        }
+      })
+      .catch((err) => {
+        console.error('Failed to fetch reviews:', err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
+
   return (
     <section id="about" style={{ backgroundColor: '#FBF8F3' }} className="py-20">
       <div className="container">
-        {/* Section Header */}
         <div className="text-center mb-16 animate-fade-in-up">
           <h2
             className="text-4xl md:text-5xl font-bold mb-4"
@@ -67,7 +95,6 @@ export default function About() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* About Section */}
           <div className="animate-fade-in-up">
             <h3
               className="text-3xl font-semibold mb-6"
@@ -93,7 +120,6 @@ export default function About() {
               </p>
             </div>
 
-            {/* Values - Warm Cafe Cards */}
             <div className="mt-12 grid grid-cols-2 gap-6">
               {[
                 { icon: Coffee, title: 'Quality', desc: 'Premium ingredients, meticulous craftsmanship', color: '#D4A574' },
@@ -106,7 +132,6 @@ export default function About() {
                   <div
                     key={idx}
                     className="p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:scale-105 border-l-4"
-                    style={{ backgroundColor: '#FBF8F3' }}
                     style={{
                       borderColor: value.color,
                       background: `linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(212, 165, 116, 0.05))`,
@@ -127,7 +152,6 @@ export default function About() {
             </div>
           </div>
 
-          {/* Quick Contact Info */}
           <div className="animate-fade-in-up delay-200">
             <div
               className="rounded-2xl shadow-lg p-8 md:p-10"
@@ -169,7 +193,6 @@ export default function About() {
           </div>
         </div>
 
-        {/* Reviews Section - Integrated into About */}
         <div className="mt-20">
           <div className="text-center mb-16 animate-fade-in-up">
             <h3
@@ -191,7 +214,6 @@ export default function About() {
             </p>
           </div>
 
-          {/* Reviews Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {reviews.map((review, index) => (
               <div
@@ -202,19 +224,16 @@ export default function About() {
                   animationDelay: `${index * 100}ms`,
                 }}
               >
-                {/* Stars */}
                 <div className="flex gap-1 mb-4">
                   {[...Array(review.rating)].map((_, i) => (
                     <Star key={i} className="w-4 h-4 fill-current" style={{ color: '#F4B860' }} />
                   ))}
                 </div>
 
-                {/* Review Text */}
                 <p className="mb-4 italic" style={{ color: '#8B7355' }}>
                   "{review.text}"
                 </p>
 
-                {/* Author Info */}
                 <div style={{ borderTop: '2px solid #D4C5B9' }} className="pt-4">
                   <p className="font-semibold" style={{ fontFamily: "'Cormorant Garamond', serif", color: '#3E2723' }}>
                     {review.name}
@@ -227,7 +246,6 @@ export default function About() {
             ))}
           </div>
 
-          {/* CTA Section */}
           <div className="mt-16 text-center rounded-lg p-12 animate-fade-in-up" style={{ background: 'linear-gradient(to right, rgba(62, 39, 35, 0.1), rgba(244, 184, 96, 0.1))' }}>
             <h3
               className="text-2xl font-semibold mb-4"
