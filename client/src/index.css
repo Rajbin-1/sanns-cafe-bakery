@@ -42,7 +42,7 @@
   --destructive-foreground: #FFFFFF;
   --border: #D4C5B9;
   --input: #FFFFFF;
-  --ring: #D4A574;
+  --ring: 32 52% 64%;
   --sidebar: #FFFFFF;
   --sidebar-foreground: #2C1810;
   --sidebar-accent: #D4A574;
@@ -72,7 +72,7 @@
   --destructive-foreground: #1A1410;
   --border: #5C4E47;
   --input: #2C2420;
-  --ring: #D4A574;
+  --ring: 32 52% 64%;
   --chart-1: #D4A574;
   --chart-2: #A0826D;
   --chart-3: #D4C5B9;
