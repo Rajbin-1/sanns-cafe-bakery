@@ -23,10 +23,14 @@ const defaultImages: Record<string, string> = {
 }
 
 const categoryMap: Record<string, MenuCategoryKey> = {
-  drinks: 'coffee',
-  food: 'signatures',
-  bakery: 'bakery',
-  specials: 'other',
+  'drinks': 'coffee',
+  'food': 'signatures',
+  'bakery': 'bakery',
+  'specials': 'other',
+  // Fallback for UI-only keys
+  'coffee': 'coffee',
+  'signatures': 'signatures',
+  'other': 'other',
 }
 
 function mapSanityToMenuItem(item: SanityMenuItem): MenuItem {
