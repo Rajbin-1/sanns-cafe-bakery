@@ -24,7 +24,6 @@ const categoryMap: Record<string, MenuCategoryKey> = {
 
 function mapSanityToMenuItem(item: SanityMenuItem): MenuItem {
   const price = item.priceMin ?? 0
-  // Prioritize Sanity image, then fallback to a generic high-quality placeholder if missing
   const image = item.imageUrl ?? 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop'
 
   return {
@@ -110,26 +109,31 @@ export default function Menu() {
 
   return (
     <section id="menu" className="py-24 bg-[#FBF8F3] relative overflow-hidden">
-      {/* Decorative Elements */}
-      <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white/50 to-transparent pointer-events-none" />
+      {/* Decorative background patterns */}
+      <div className="absolute top-0 left-0 w-full h-full opacity-[0.03] pointer-events-none" 
+           style={{ backgroundImage: 'radial-gradient(#D4A574 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
       
-      <div className="container relative z-10">
-        <div className="text-center mb-20">
-          <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-[#D4A574]/10 text-[#D4A574] mb-6 animate-fade-in">
-            <Sparkles size={16} />
-            <span className="text-sm font-bold uppercase tracking-widest">Exquisite Selection</span>
+      <div className="container relative z-10 max-w-6xl mx-auto px-4">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-[#D4A574]/10 text-[#D4A574] mb-6">
+            <Sparkles size={16} className="animate-pulse" />
+            <span className="text-sm font-bold uppercase tracking-widest">Handcrafted Experience</span>
           </div>
           <h2 className="text-5xl md:text-6xl font-bold text-[#3E2723] mb-6 leading-tight" style={{ fontFamily: "'Playfair Display', serif" }}>
             Our Menu
           </h2>
-          <div className="w-24 h-1 bg-[#D4A574] mx-auto rounded-full mb-8" />
+          <div className="flex items-center justify-center gap-4 mb-8">
+            <div className="h-[1px] w-12 bg-[#D4A574]/30" />
+            <div className="w-3 h-3 rounded-full bg-[#D4A574]" />
+            <div className="h-[1px] w-12 bg-[#D4A574]/30" />
+          </div>
           <p className="text-xl text-[#8B7355] max-w-2xl mx-auto font-light leading-relaxed">
-            Experience the art of fine dining with our handcrafted beverages and artisanal delights.
+            Taste the passion in every bite and sip. Our selection is balanced for every mood.
           </p>
         </div>
 
-        {/* Category Selection */}
-        <div className="flex flex-wrap justify-center gap-4 mb-16">
+        {/* Centered Category Navigation */}
+        <div className="flex flex-wrap justify-center items-center gap-3 md:gap-6 mb-20">
           {categories.map((cat) => {
             const isActive = activeCategory === cat.id
             const Icon = cat.icon
@@ -137,85 +141,122 @@ export default function Menu() {
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id as MenuCategoryKey)}
-                className={`group flex items-center gap-3 px-8 py-4 rounded-2xl font-bold transition-all duration-500 shadow-sm hover:shadow-xl transform hover:-translate-y-1 border-2 ${
-                  isActive ? 'bg-[#3E2723] border-[#3E2723] text-white' : 'bg-white border-transparent text-[#8B7355] hover:border-[#D4A574]/30'
+                className={`group flex items-center gap-3 px-6 py-3 md:px-8 md:py-4 rounded-full font-bold transition-all duration-500 transform hover:-translate-y-1 ${
+                  isActive 
+                    ? 'bg-[#3E2723] text-white shadow-[0_10px_20px_rgba(62,39,35,0.2)]' 
+                    : 'bg-white text-[#8B7355] hover:bg-[#F5F1E8] shadow-sm'
                 }`}
               >
-                <Icon size={20} className={isActive ? 'text-[#D4A574]' : 'group-hover:text-[#D4A574] transition-colors'} />
-                {cat.label}
+                <Icon size={18} className={isActive ? 'text-[#D4A574]' : 'group-hover:text-[#D4A574] transition-colors'} />
+                <span className="text-sm md:text-base">{cat.label}</span>
               </button>
             )
           })}
         </div>
 
-        {/* Menu Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {currentItems.length > 0 ? (
-            currentItems.map((item, index) => (
-              <div
-                key={`${item.name}-${index}`}
-                className="group bg-white rounded-[2rem] overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 border border-[#D4A574]/5 flex flex-col h-full"
-                style={{ animation: `fadeInUp 0.6s ease-out forwards ${index * 0.1}s` }}
-              >
-                <div className="relative h-64 overflow-hidden">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="absolute bottom-4 left-6 right-6 flex justify-between items-end transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                    <div className="flex gap-2">
-                      {item.tags?.slice(0, 2).map(tag => (
-                        <span key={tag} className="px-3 py-1 bg-[#D4A574] text-white text-[10px] font-bold uppercase rounded-full shadow-lg">
+        {/* Balanced and Centered Menu Grid */}
+        <div className="flex justify-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 w-full">
+            {currentItems.length > 0 ? (
+              currentItems.map((item, index) => (
+                <div
+                  key={`${item.name}-${index}`}
+                  className="group bg-white rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-700 flex flex-col h-full border border-transparent hover:border-[#D4A574]/20"
+                  style={{ 
+                    animation: `popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards ${index * 0.1}s`,
+                    opacity: 0,
+                    transform: 'scale(0.8)'
+                  }}
+                >
+                  {/* Image Container with "Popping" Zoom Effect */}
+                  <div className="relative h-72 overflow-hidden m-3 rounded-[2rem]">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-1000 ease-out"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#3E2723]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    
+                    {/* Price Tag Overlay */}
+                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full shadow-lg">
+                      <span className="text-[#3E2723] font-black text-sm md:text-base">
+                        {item.price}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Content - Centered Text */}
+                  <div className="px-8 pb-10 pt-4 text-center flex flex-col flex-grow">
+                    <div className="flex justify-center gap-1 mb-3">
+                      {item.tags?.map(tag => (
+                        <span key={tag} className="text-[10px] font-black uppercase tracking-widest text-[#D4A574] px-2 py-0.5 rounded bg-[#D4A574]/5">
                           {tag}
                         </span>
                       ))}
                     </div>
-                  </div>
-                </div>
-
-                <div className="p-8 flex flex-col flex-grow">
-                  <div className="flex justify-between items-start gap-4 mb-4">
-                    <h3 className="text-2xl font-bold text-[#3E2723] group-hover:text-[#D4A574] transition-colors duration-300 leading-tight" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+                    
+                    <h3 className="text-2xl font-bold text-[#3E2723] mb-4 leading-tight group-hover:text-[#D4A574] transition-colors duration-300" 
+                        style={{ fontFamily: "'Playfair Display', serif" }}>
                       {item.name}
                     </h3>
-                    <span className="text-xl font-black text-[#D4A574] whitespace-nowrap" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-                      {item.price}
-                    </span>
-                  </div>
-                  <p className="text-[#8B7355] text-sm leading-relaxed mb-6 flex-grow">
-                    {item.description}
-                  </p>
-                  <div className="pt-6 border-t border-[#FBF8F3] flex items-center justify-between">
-                    <span className="text-[10px] font-bold tracking-widest uppercase text-[#D4A574]/60">Sann's Signature</span>
-                    <button className="text-[#3E2723] hover:text-[#D4A574] transition-colors">
-                      <Sparkles size={18} />
+                    
+                    <div className="w-8 h-[2px] bg-[#D4A574]/20 mx-auto mb-4 group-hover:w-16 transition-all duration-500" />
+                    
+                    <p className="text-[#8B7355] text-sm leading-relaxed mb-6 flex-grow italic">
+                      "{item.description}"
+                    </p>
+                    
+                    <button className="inline-flex items-center justify-center gap-2 text-[#3E2723] font-bold text-xs uppercase tracking-widest group-hover:gap-4 transition-all duration-300">
+                      <span>Explore Taste</span>
+                      <Sparkles size={14} className="text-[#D4A574]" />
                     </button>
                   </div>
                 </div>
+              ))
+            ) : (
+              <div className="col-span-full py-20 text-center">
+                <div className="bg-white/50 p-12 rounded-[3rem] inline-block border border-dashed border-[#D4A574]/30">
+                  <p className="text-[#8B7355] text-lg italic">We are currently perfecting these recipes. Stay tuned!</p>
+                </div>
               </div>
-            ))
-          ) : (
-            <div className="col-span-full py-20 text-center">
-              <p className="text-[#8B7355] italic">No items found in this category yet.</p>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
-        {/* Bottom Note */}
+        {/* Refined Footer Info */}
         <div className="mt-24 text-center">
-          <div className="inline-block px-10 py-6 rounded-3xl bg-white shadow-sm border border-[#D4A574]/10 max-w-3xl">
-            <p className="text-[#8B7355] text-sm italic leading-relaxed">
-              * Prices are inclusive of local taxes. We prioritize fresh, locally sourced ingredients for every dish.
-              <br />
-              Digital payments via Fonepay and cards are highly encouraged.
+          <div className="inline-flex flex-col items-center gap-4">
+            <div className="flex gap-4">
+              <div className="w-1.5 h-1.5 rounded-full bg-[#D4A574]" />
+              <div className="w-1.5 h-1.5 rounded-full bg-[#D4A574]/60" />
+              <div className="w-1.5 h-1.5 rounded-full bg-[#D4A574]/30" />
+            </div>
+            <p className="text-[#8B7355] text-sm font-medium tracking-wide max-w-lg">
+              Freshness guaranteed. All items are prepared daily in our Sann's kitchen. 
+              We accept all major digital payments.
             </p>
           </div>
         </div>
       </div>
+
+      {/* PopIn Animation Keyframes */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes popIn {
+          0% {
+            opacity: 0;
+            transform: scale(0.8) translateY(30px);
+          }
+          70% {
+            transform: scale(1.05) translateY(-5px);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
+        }
+      `}} />
     </section>
   )
-            }
-                                                  
+}
+  
